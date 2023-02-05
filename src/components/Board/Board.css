@@ -1,0 +1,8 @@
+.fill-window {
+    height: 90vh;
+    width: 90%;
+    overflow: hidden;
+    background: url('../../assets/Board.jpeg') ;
+    background-repeat: no-repeat;
+    background-size: contain;
+}

@@ -1,4 +1,5 @@
 import {
+  ChangeEvent,
   useRef,
   useState,
   type DragEventHandler,
@@ -26,12 +27,12 @@ const Piece: React.FC<Props> = (props: Props) => {
     console.log(e.target);
   };
 
-  const dragEnd: any = (e: any) => {
-    setWidth(e.pageX);
-    setHeight(e.pageY);
+  const dragEnd: any = (e: DragEvent) => {
+    setWidth(e.clientX - 50);
+    setHeight(e.clientY - 50);
     console.log("drag end");
-    console.log("page x: ", e.pageX);
-    console.log("page y: ", e.pageY);
+    console.log("client x: ", e.clientX);
+    console.log("client y: ", e.clientY);
   };
 
   // const dragEnter: any = (e: any) => {
@@ -42,7 +43,7 @@ const Piece: React.FC<Props> = (props: Props) => {
   return (
     <img
       style={{
-        position: "relative",
+        position: "absolute",
         left: width,
         top: height,
       }}

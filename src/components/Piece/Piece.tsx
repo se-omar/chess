@@ -1,4 +1,9 @@
-import { useRef, type DragEventHandler, type MouseEventHandler } from "react";
+import {
+  useRef,
+  useState,
+  type DragEventHandler,
+  type MouseEventHandler,
+} from "react";
 
 interface Props {
   image: string;
@@ -13,6 +18,8 @@ interface Position {
 
 const Piece: React.FC<Props> = (props: Props) => {
   const dragPiece = useRef<number>(0);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   const dragStart: any = (e: any, position: number) => {
     dragPiece.current = position;
@@ -20,7 +27,11 @@ const Piece: React.FC<Props> = (props: Props) => {
   };
 
   const dragEnd: any = (e: any) => {
+    setWidth(e.pageX);
+    setHeight(e.pageY);
     console.log("drag end");
+    console.log("page x: ", e.pageX);
+    console.log("page y: ", e.pageY);
   };
 
   // const dragEnter: any = (e: any) => {
@@ -30,6 +41,11 @@ const Piece: React.FC<Props> = (props: Props) => {
 
   return (
     <img
+      style={{
+        position: "relative",
+        left: width,
+        top: height,
+      }}
       onDragStart={(e) => dragStart(e)}
       onDragEnd={(e) => dragEnd(e)}
       draggable

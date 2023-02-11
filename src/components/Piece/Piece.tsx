@@ -5,11 +5,12 @@ import {
   type DragEventHandler,
   type MouseEventHandler,
 } from "react";
+import "./Piece.css";
 
 interface Props {
   image: string;
   team: string;
-  position: Position;
+  position?: Position;
 }
 
 interface Position {
@@ -42,11 +43,7 @@ const Piece: React.FC<Props> = (props: Props) => {
 
   return (
     <img
-      style={{
-        position: "absolute",
-        left: width,
-        top: height,
-      }}
+      className="piece-style"
       onDragStart={(e) => dragStart(e)}
       onDragEnd={(e) => dragEnd(e)}
       draggable

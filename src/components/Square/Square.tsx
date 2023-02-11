@@ -8,12 +8,12 @@ interface Props {
 
 const Square: React.FC<Props> = ({ color }: Props) => {
   return (
-    <span className="square">
+    <div className="square">
       <img
         className="square-img"
         src={color === "black" ? blackSquare : whiteSquare}
       />
-    </span>
+    </div>
   );
 };
 

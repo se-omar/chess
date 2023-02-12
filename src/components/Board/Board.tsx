@@ -1,8 +1,7 @@
-// import Piece from "../Piece/Piece";
 import "./Board.css";
-import whiteKing from "../../assets/white-pieces/white-king.png";
 import Square from "../Square/Square";
 import Piece from "../Piece/Piece";
+import PieceImgs from "../../imports/piece-imports";
 
 const Board: React.FC = () => {
   const rowSize = 8;
@@ -16,7 +15,9 @@ const Board: React.FC = () => {
     const row: JSX.Element[] = [];
     for (let j = 0; j < rowSize; j++) {
       sqColor = isBlack ? "black" : "white";
-      const piece = <Piece key={key} image={whiteKing} team={sqColor} />;
+      const piece = (
+        <Piece key={key} image={PieceImgs.blackKnight} team={sqColor} />
+      );
       row.push(<Square key={key++} piece={piece} team={sqColor} />);
       if (j !== 7) isBlack = !isBlack;
     }

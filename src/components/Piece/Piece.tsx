@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import "./Piece.css";
-import PieceImgs from "../../imports/piece-imports";
 import Rook from "../Rook";
 import Knight from "../Knight";
 import Bishop from "../Bishop";
@@ -24,25 +23,6 @@ const Piece: React.FC<Props> = (props: Props) => {
   // const [width, setWidth] = useState(0);
   // const [height, setHeight] = useState(0);
 
-  const getPieceComponent = (name: string, team: string): JSX.Element => {
-    switch (name) {
-      case "rook":
-        return <Rook team={team} />;
-      case "knight":
-        return <Knight team={team} />;
-      case "bishop":
-        return <Bishop team={team} />;
-      case "pawn":
-        return <Pawn team={team} />;
-      case "queen":
-        return <Queen team={team} />;
-      case "king":
-        return <King team={team} />;
-      default:
-        return <King team={team} />;
-    }
-  };
-
   const dragStart: any = (e: any, position: number) => {
     dragPiece.current = position;
     console.log(e.target);
@@ -60,7 +40,22 @@ const Piece: React.FC<Props> = (props: Props) => {
   //   // dragOverItem.current = position;
   //   console.log("drag enter");
   // };
-  return getPieceComponent(props.name, props.team);
+  switch (props.name) {
+    case "rook":
+      return <Rook team={props.team} />;
+    case "knight":
+      return <Knight team={props.team} />;
+    case "bishop":
+      return <Bishop team={props.team} />;
+    case "pawn":
+      return <Pawn team={props.team} />;
+    case "queen":
+      return <Queen team={props.team} />;
+    case "king":
+      return <King team={props.team} />;
+    default:
+      return <King team={props.team} />;
+  }
   /* <img
      className="piece-style"
      onDragStart={(e) => dragStart(e)}
@@ -69,9 +64,5 @@ const Piece: React.FC<Props> = (props: Props) => {
      src={image}
    /> */
 };
-
-// const onMouseDown: MouseEventHandler<HTMLDivElement> = () => {
-//   console.log("asdf");
-// };
 
 export default Piece;

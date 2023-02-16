@@ -24,42 +24,22 @@ const Piece: React.FC<Props> = (props: Props) => {
   // const [width, setWidth] = useState(0);
   // const [height, setHeight] = useState(0);
 
-  const getPieceComponent = (
-    name: string,
-    team: string,
-  ): JSX.Element | undefined => {
-    if (team === "black") {
-      switch (name) {
-        case "rook":
-          return <Rook team={team} />;
-        case "knight":
-          return <Knight team={team} />;
-        case "bishop":
-          return <Bishop team={team} />;
-        case "pawn":
-          return <Pawn team={team} />;
-        case "queen":
-          return <Queen team={team} />;
-        case "king":
-          return <King team={team} />;
-      }
-    }
-
-    if (team === "white") {
-      switch (name) {
-        case "rook":
-          return PieceImgs.whiteRook;
-        case "knight":
-          return PieceImgs.whiteKnight;
-        case "bishop":
-          return PieceImgs.whiteBishop;
-        case "pawn":
-          return PieceImgs.whitePawn;
-        case "queen":
-          return PieceImgs.whiteQueen;
-        case "king":
-          return PieceImgs.whiteKing;
-      }
+  const getPieceComponent = (name: string, team: string): JSX.Element => {
+    switch (name) {
+      case "rook":
+        return <Rook team={team} />;
+      case "knight":
+        return <Knight team={team} />;
+      case "bishop":
+        return <Bishop team={team} />;
+      case "pawn":
+        return <Pawn team={team} />;
+      case "queen":
+        return <Queen team={team} />;
+      case "king":
+        return <King team={team} />;
+      default:
+        return <King team={team} />;
     }
   };
 

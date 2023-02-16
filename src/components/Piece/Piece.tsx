@@ -1,6 +1,12 @@
 import { useRef } from "react";
 import "./Piece.css";
 import PieceImgs from "../../imports/piece-imports";
+import Rook from "../Rook";
+import Knight from "../Knight";
+import Bishop from "../Bishop";
+import Pawn from "../Pawn";
+import Queen from "../Queen";
+import King from "../King";
 
 interface Props {
   team: string;
@@ -18,21 +24,24 @@ const Piece: React.FC<Props> = (props: Props) => {
   // const [width, setWidth] = useState(0);
   // const [height, setHeight] = useState(0);
 
-  const getPieceImage = (name: string, team: string): string | undefined => {
+  const getPieceComponent = (
+    name: string,
+    team: string,
+  ): JSX.Element | undefined => {
     if (team === "black") {
       switch (name) {
         case "rook":
-          return PieceImgs.blackRook;
+          return <Rook team={team} />;
         case "knight":
-          return PieceImgs.blackKnight;
+          return <Knight team={team} />;
         case "bishop":
-          return PieceImgs.blackBishop;
+          return <Bishop team={team} />;
         case "pawn":
-          return PieceImgs.blackPawn;
+          return <Pawn team={team} />;
         case "queen":
-          return PieceImgs.blackQueen;
+          return <Queen team={team} />;
         case "king":
-          return PieceImgs.blackKing;
+          return <King team={team} />;
       }
     }
 
@@ -71,16 +80,14 @@ const Piece: React.FC<Props> = (props: Props) => {
   //   // dragOverItem.current = position;
   //   console.log("drag enter");
   // };
-  const image = getPieceImage(props.name, props.team);
-  return (
-    <img
-      className="piece-style"
-      onDragStart={(e) => dragStart(e)}
-      onDragEnd={(e) => dragEnd(e)}
-      draggable
-      src={image}
-    />
-  );
+  return getPieceComponent(props.name, props.team);
+  /* <img
+     className="piece-style"
+     onDragStart={(e) => dragStart(e)}
+     onDragEnd={(e) => dragEnd(e)}
+     draggable
+     src={image}
+   /> */
 };
 
 // const onMouseDown: MouseEventHandler<HTMLDivElement> = () => {

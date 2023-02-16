@@ -6,7 +6,6 @@ import Piece from "../Piece/Piece";
 const Board: React.FC = () => {
   const rowSize = 8;
   const colSize = 8;
-
   let squaresMatrix: JSX.Element[][] = [];
   let isBlack = true;
   let sqColor = "black";

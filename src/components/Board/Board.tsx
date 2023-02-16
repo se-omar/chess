@@ -1,7 +1,7 @@
 import "./Board.css";
 import Square from "../Square/Square";
 import Piece from "../Piece/Piece";
-import PieceImgs from "../../imports/piece-imports";
+// import PieceImgs from "../../imports/piece-imports";
 
 const Board: React.FC = () => {
   const rowSize = 8;
@@ -11,25 +11,40 @@ const Board: React.FC = () => {
   let sqColor = "black";
 
   const getPieceByPosition: any = (row: number, col: number) => {
-    if (row === 0) {
+    let name = "";
+    let team = "";
+    if (row === 0 || row === 1) team = "black";
+    else if (row === 7 || row === 6) team = "white";
+
+    if (row === 1 || row === 6) {
+      name = "pawn";
+    } else {
       switch (col) {
         case 0:
         case 7:
-          return PieceImgs.blackRook;
+          name = "rook";
+          break;
         case 1:
         case 6:
-          return PieceImgs.blackKnight;
+          name = "knight";
+          break;
         case 2:
         case 5:
-          return PieceImgs.blackBishop;
+          name = "bishop";
+          break;
         case 3:
-          return PieceImgs.blackQueen;
+          name = "queen";
+          break;
         case 4:
-          return PieceImgs.blackKing;
+          name = "king";
+          break;
       }
     }
 
-    if (row === 1) return PieceImgs.blackPawn;
+    return {
+      name,
+      team,
+    };
   };
 
   const fillMatrix = (): JSX.Element[][] => {
@@ -39,8 +54,10 @@ const Board: React.FC = () => {
       const row: JSX.Element[] = [];
       for (let j = 0; j < rowSize; j++) {
         sqColor = isBlack ? "black" : "white";
-        const pieceImg = getPieceByPosition(i, j);
-        const piece = <Piece key={key} image={pieceImg} team={sqColor} />;
+        const pieceInfo = getPieceByPosition(i, j);
+        const piece = (
+          <Piece key={key} name={pieceInfo.name} team={pieceInfo.team} />
+        );
         row.push(<Square key={key++} piece={piece} team={sqColor} />);
         if (j !== 7) isBlack = !isBlack;
       }

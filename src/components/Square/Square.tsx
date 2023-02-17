@@ -6,7 +6,7 @@ import "./Square.css";
 
 interface Props {
   team: string;
-  piece: JSX.Element;
+  piece: JSX.Element | null;
 }
 
 const Square: React.FC<Props> = ({ team: color, piece }: Props) => {
@@ -16,7 +16,7 @@ const Square: React.FC<Props> = ({ team: color, piece }: Props) => {
         className="square-img"
         src={color === "black" ? blackSquare : whiteSquare}
       />
-      {piece}
+      {piece !== null && piece}
     </div>
   );
 };

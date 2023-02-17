@@ -55,9 +55,12 @@ const Board: React.FC = () => {
       for (let j = 0; j < rowSize; j++) {
         sqColor = isBlack ? "black" : "white";
         const pieceInfo = getPieceByPosition(i, j);
-        const piece = (
-          <Piece key={key} name={pieceInfo.name} team={pieceInfo.team} />
-        );
+        let piece = null;
+        if (pieceInfo.team !== "") {
+          piece = (
+            <Piece key={key} name={pieceInfo.name} team={pieceInfo.team} />
+          );
+        }
         row.push(<Square key={key++} piece={piece} team={sqColor} />);
         if (j !== 7) isBlack = !isBlack;
       }

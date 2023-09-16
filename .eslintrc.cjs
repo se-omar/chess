@@ -21,5 +21,7 @@ module.exports = {
   },
   rules: {
     'no-param-reassign': ['error', { props: false }],
+    'no-console': 'off',
+    'import/prefer-default-export': 'off',
   },
 };

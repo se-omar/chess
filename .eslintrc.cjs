@@ -20,9 +20,11 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'linebreak-style': 'off',
     'no-param-reassign': ['error', { props: false }],
     'no-console': 'off',
     'import/prefer-default-export': 'off',
     'no-restricted-syntax': 'off',
+    indent: 'off',
   },
 };

@@ -3,10 +3,10 @@ export const renderBoard = (element) => {
   const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   const renderPiece = (id) => {
     if (id[1] === '7') {
-      return "<img class='pieces' src='../src/assets/blackPieces/black-pawn.png' />";
+      return "<img class='pieces pawn' src='../src/assets/blackPieces/black-pawn.png' />";
     }
     if (id[1] === '2') {
-      return "<img class='pieces' src='../src/assets/whitePieces/white-pawn.png' />";
+      return "<img class='pieces pawn' src='../src/assets/whitePieces/white-pawn.png' />";
     }
     switch (id) {
       case 'A8':
@@ -53,9 +53,7 @@ export const renderBoard = (element) => {
     iswhite = !iswhite;
     for (const col of cols) {
       rowHtml += `<span id="${col}${row}" class=${iswhite ? 'white' : 'black'}>
-      
       ${renderPiece(col + row)}
-      
       </span>`;
       iswhite = !iswhite;
     }
@@ -64,5 +62,10 @@ export const renderBoard = (element) => {
   }
 
   element.innerHTML = rowHtml;
-  console.log('aeu');
+
+  document.querySelectorAll('.pieces').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      console.log('e:', e);
+    });
+  });
 };

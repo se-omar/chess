@@ -6,10 +6,10 @@ export const renderBoard = (element) => {
     const whitePawn = new Pawn(id[0], id[1], 'white');
     const blackPawn = new Pawn(id[0], id[1], 'black');
     if (id[1] === '7') {
-      return blackPawn.render();
+      blackPawn.render();
     }
     if (id[1] === '2') {
-      return whitePawn.render();
+      whitePawn.render();
     }
     // switch (id) {
     //   case 'A8':

@@ -21,9 +21,9 @@ class Pawn {
 
   getAvailableMoves() {}
 
-  move() {}
-
-  attack() {}
+  // move() {}
+  //
+  // attack() {}
 }
 
 export default Pawn;

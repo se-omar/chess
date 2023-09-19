@@ -1,8 +1,7 @@
 import Pawn from './pieces/Pawn';
+import { COLS, ROWS } from './utils/constants';
 
 export const renderBoard = (element) => {
-  const rows = ['1', '2', '3', '4', '5', '6', '7', '8'];
-  const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   const renderPiece = (id) => {
     const whitePawn = new Pawn(id[0], id[1], 'white');
     const blackPawn = new Pawn(id[0], id[1], 'black');
@@ -52,10 +51,10 @@ export const renderBoard = (element) => {
 
   let rowHtml = '';
   let iswhite = false;
-  for (const row of rows.reverse()) {
+  for (const row of ROWS.reverse()) {
     rowHtml += '<div class="row">';
     iswhite = !iswhite;
-    for (const col of cols) {
+    for (const col of COLS) {
       rowHtml += `<span id="${col}${row}" class=${
         iswhite ? 'white' : 'black'
       }> </span>`;
@@ -67,8 +66,8 @@ export const renderBoard = (element) => {
 
   element.innerHTML = rowHtml;
 
-  for (const row of rows.reverse()) {
-    for (const col of cols) {
+  for (const row of ROWS.reverse()) {
+    for (const col of COLS) {
       renderPiece(col + row);
     }
   }

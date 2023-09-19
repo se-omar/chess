@@ -1,19 +1,24 @@
 .black {
-  background-image: url('./assets/black-square.jpeg');
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
+  background-color: #779556;
 }
 .white {
-  background-image: url('./assets/white-square.jpeg');
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #EEEED2;
+}
+
+.highlighted {
+  background-color: #00BFFF90 !important;
+
 }
 .row {
   height: 100px;

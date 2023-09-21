@@ -1,62 +1,125 @@
-export const renderBoard = (element) => {
-  const rows = ['1', '2', '3', '4', '5', '6', '7', '8'];
-  const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  const renderPiece = (id) => {
-    if (id[1] === '7') {
-      return "<img class='pieces' src='../src/assets/blackPieces/black-pawn.png' />";
+import Pawn from './pieces/Pawn';
+import { COLS, ROWS } from './utils/constants';
+
+const pieces = {};
+function addPieces(piece, position) {
+  pieces[position] = piece;
+}
+
+function highlightMoves(piece, availCols, availRows) {
+  removeHighlight();
+
+  availCols.forEach((col) => {
+    document.querySelector(`#${col}${piece.row}`).classList.add('highlighted');
+  });
+
+  availRows.forEach((row) => {
+    document.querySelector(`#${piece.col}${row}`).classList.add('highlighted');
+  });
+}
+function handlePieceClick(piece, element) {
+  if (!element.classList.contains('clickedPiece')) {
+    element.classList.add('clickedPiece');
+    const [availCols, availRows] = piece.getAvailableMoves(element);
+    highlightMoves(piece, availCols, availRows);
+  } else {
+    removeHighlight();
+    element.classList.remove('clickedPiece');
+  }
+
+  document.querySelectorAll('.clickedPiece').forEach((el) => {
+    if (el !== element) {
+      el.classList.remove('clickedPiece');
     }
-    if (id[1] === '2') {
-      return "<img class='pieces' src='../src/assets/whitePieces/white-pawn.png' />";
-    }
-    switch (id) {
-      case 'A8':
-      case 'H8':
-        return "<img class='pieces' src='../src/assets/blackPieces/black-rook.png' />";
-      case 'B8':
-      case 'G8':
-        return "<img class='pieces' src='../src/assets/blackPieces/black-knight.png' />";
-      case 'C8':
-      case 'F8':
-        return "<img class='pieces' src='../src/assets/blackPieces/black-bishop.png' />";
-      case 'D8':
-        return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
-      case 'E8':
-        return "<img class='pieces' src='../src/assets/blackPieces/black-queen.png' />";
+  });
+}
 
-      //
-      //  white pieces
-      //
+function renderPiece(id) {
+  const whitePawn = new Pawn(id[0], id[1], 'white');
+  const blackPawn = new Pawn(id[0], id[1], 'black');
+  if (id[1] === '7') {
+    const blackPawnEl = blackPawn.render();
+    addPieces(blackPawn, id);
+    blackPawnEl.addEventListener('click', () => {
+      handlePieceClick(blackPawn, blackPawnEl);
+    });
+  }
+  if (id[1] === '2') {
+    const whitePawnEl = whitePawn.render();
+    addPieces(whitePawn, id);
+    whitePawnEl.addEventListener('click', () => {
+      handlePieceClick(whitePawn, whitePawnEl);
+    });
+  }
+  // switch (id) {
+  //   case 'A8':
+  //   case 'H8':
+  //     return "<img class='pieces' src='../src/assets/blackPieces/black-rook.png' />";
+  //   case 'B8':
+  //   case 'G8':
+  //     return "<img class='pieces' src='../src/assets/blackPieces/black-knight.png' />";
+  //   case 'C8':
+  //   case 'F8':
+  //     return "<img class='pieces' src='../src/assets/blackPieces/black-bishop.png' />";
+  //   case 'D8':
+  //     return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
+  //   case 'E8':
+  //     return "<img class='pieces' src='../src/assets/blackPieces/black-queen.png' />";
+  //
+  //   //
+  //   //  white pieces
+  //   //
+  //
+  //   case 'A1':
+  //   case 'H1':
+  //     return "<img class='pieces' src='../src/assets/whitePieces/white-rook.png' />";
+  //   case 'B1':
+  //   case 'G1':
+  //     return "<img class='pieces' src='../src/assets/whitePieces/white-knight.png' />";
+  //   case 'C1':
+  //   case 'F1':
+  //     return "<img class='pieces' src='../src/assets/whitePieces/white-bishop.png' />";
+  //   case 'D1':
+  //     return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
+  //   case 'E1':
+  //     return "<img class='pieces' src='../src/assets/whitePieces/white-queen.png' />";
+  //
+  //   default:
+  //     return '';
+  // }
+}
 
-      case 'A1':
-      case 'H1':
-        return "<img class='pieces' src='../src/assets/whitePieces/white-rook.png' />";
-      case 'B1':
-      case 'G1':
-        return "<img class='pieces' src='../src/assets/whitePieces/white-knight.png' />";
-      case 'C1':
-      case 'F1':
-        return "<img class='pieces' src='../src/assets/whitePieces/white-bishop.png' />";
-      case 'D1':
-        return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
-      case 'E1':
-        return "<img class='pieces' src='../src/assets/whitePieces/white-queen.png' />";
+function removeHighlight() {
+  document
+    .querySelectorAll('.highlighted')
+    .forEach((el) => el.classList.remove('highlighted'));
+}
 
-      default:
-        return '';
-    }
-  };
+function movePiece(e) {
+  if (e.target.classList.contains('highlighted')) {
+    const clickedPiece = document.querySelector('.clickedPiece');
+    const position = clickedPiece.parentElement.id;
+    const piece = pieces[position];
+    e.target.appendChild(clickedPiece);
+    [piece.col, piece.row] = e.target.id;
+    delete pieces[position];
+    pieces[e.target.id] = piece;
+    piece.moveCount += 1;
 
+    removeHighlight();
+  }
+}
+
+export function renderBoard(element) {
   let rowHtml = '';
   let iswhite = false;
-  for (const row of rows.reverse()) {
+  for (const row of ROWS.reverse()) {
     rowHtml += '<div class="row">';
     iswhite = !iswhite;
-    for (const col of cols) {
-      rowHtml += `<span id="${col}${row}" class=${iswhite ? 'white' : 'black'}>
-      
-      ${renderPiece(col + row)}
-      
-      </span>`;
+    for (const col of COLS) {
+      rowHtml += `<span id="${col}${row}" class=${
+        iswhite ? 'white' : 'black'
+      }> </span>`;
       iswhite = !iswhite;
     }
 
@@ -64,5 +127,13 @@ export const renderBoard = (element) => {
   }
 
   element.innerHTML = rowHtml;
-  console.log('aeu');
-};
+
+  for (const row of ROWS.reverse()) {
+    for (const col of COLS) {
+      renderPiece(col + row);
+      document
+        .querySelector(`#${col}${row}`)
+        .addEventListener('click', movePiece);
+    }
+  }
+}

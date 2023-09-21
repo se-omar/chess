@@ -1,6 +1,11 @@
 import Pawn from './pieces/Pawn';
 import { COLS, ROWS } from './utils/constants';
 
+const pieces = {};
+function addPieces(piece, position) {
+  pieces[position] = piece;
+}
+
 function highlightMoves(piece, availCols, availRows) {
   removeHighlight();
 
@@ -15,7 +20,7 @@ function highlightMoves(piece, availCols, availRows) {
 function handlePieceClick(piece, element) {
   if (!element.classList.contains('clickedPiece')) {
     element.classList.add('clickedPiece');
-    const [availCols, availRows] = piece.getAvailableMoves();
+    const [availCols, availRows] = piece.getAvailableMoves(element);
     highlightMoves(piece, availCols, availRows);
   } else {
     removeHighlight();
@@ -34,12 +39,14 @@ function renderPiece(id) {
   const blackPawn = new Pawn(id[0], id[1], 'black');
   if (id[1] === '7') {
     const blackPawnEl = blackPawn.render();
+    addPieces(blackPawn, id);
     blackPawnEl.addEventListener('click', () => {
       handlePieceClick(blackPawn, blackPawnEl);
     });
   }
   if (id[1] === '2') {
     const whitePawnEl = whitePawn.render();
+    addPieces(whitePawn, id);
     whitePawnEl.addEventListener('click', () => {
       handlePieceClick(whitePawn, whitePawnEl);
     });
@@ -91,7 +98,13 @@ function removeHighlight() {
 function movePiece(e) {
   if (e.target.classList.contains('highlighted')) {
     const clickedPiece = document.querySelector('.clickedPiece');
+    const position = clickedPiece.parentElement.id;
+    const piece = pieces[position];
     e.target.appendChild(clickedPiece);
+    [piece.col, piece.row] = e.target.id;
+    delete pieces[position];
+    pieces[e.target.id] = piece;
+    piece.moveCount += 1;
 
     removeHighlight();
   }

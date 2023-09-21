@@ -12,7 +12,6 @@ class Pawn {
   }
 
   render() {
-    console.log('aoeuoae');
     const pawn = document.createElement('img');
     pawn.classList.add('pieces', 'pawn');
     pawn.setAttribute(
@@ -28,18 +27,14 @@ class Pawn {
   getAvailableMoves() {
     const availCols = [];
     const availRows = [];
+    const sign = this.color === 'white' ? 1 : -1;
     if (this.moveCount === 0) {
-      if (this.color === 'white') {
-        availRows.push(
-          ROWS[ROWS.indexOf(this.row) + 1],
-          ROWS[ROWS.indexOf(this.row) + 2],
-        );
-      } else {
-        availRows.push(
-          ROWS[ROWS.indexOf(this.row) - 1],
-          ROWS[ROWS.indexOf(this.row) - 2],
-        );
-      }
+      availRows.push(
+        ROWS[ROWS.indexOf(this.row) + 1 * sign],
+        ROWS[ROWS.indexOf(this.row) + 2 * sign],
+      );
+    } else {
+      availRows.push(ROWS[ROWS.indexOf(this.row) + 1 * sign]);
     }
 
     return [availCols, availRows];

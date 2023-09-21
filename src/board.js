@@ -6,7 +6,24 @@ export const renderBoard = (element) => {
     const whitePawn = new Pawn(id[0], id[1], 'white');
     const blackPawn = new Pawn(id[0], id[1], 'black');
     if (id[1] === '7') {
-      blackPawn.render();
+      const blackPawnEl = blackPawn.render();
+
+      blackPawnEl.addEventListener('click', function () {
+        if (!this.classList.contains('clickedPiece')) {
+          this.classList.add('clickedPiece');
+          const [availCols, availRows] = blackPawn.getAvailableMoves();
+          blackPawn.highlightMoves(availCols, availRows);
+        } else {
+          blackPawn.removeHighlight();
+          this.classList.remove('clickedPiece');
+        }
+
+        document.querySelectorAll('.clickedPiece').forEach((el) => {
+          if (el !== this) {
+            el.classList.remove('clickedPiece');
+          }
+        });
+      });
     }
     if (id[1] === '2') {
       whitePawn.render();
@@ -69,6 +86,13 @@ export const renderBoard = (element) => {
   for (const row of ROWS.reverse()) {
     for (const col of COLS) {
       renderPiece(col + row);
+
+      document.querySelector(`#${col}${row}`).addEventListener('click', (e) => {
+        // if (e.target.classList.contains('highlighted')) {
+        //   const clickedPiece = document.querySelector('.clickedPiece')
+        //
+        // }
+      });
     }
   }
 };

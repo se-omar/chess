@@ -3,6 +3,8 @@ import { COLS, ROWS } from '../utils/constants';
 class Pawn {
   moveCount = 0;
 
+  clicked = false;
+
   constructor(col, row, color) {
     this.col = col;
     this.row = row;
@@ -12,17 +14,15 @@ class Pawn {
   render() {
     console.log('aoeuoae');
     const pawn = document.createElement('img');
-    pawn.setAttribute('class', 'pieces pawn');
+    pawn.classList.add('pieces', 'pawn');
     pawn.setAttribute(
       'src',
       `../src/assets/${this.color}Pieces/${this.color}-pawn.png`,
     );
 
-    pawn.addEventListener('click', (e) => {
-      const [availCols, availRows] = this.getAvailableMoves();
-      this.highlightMoves(availCols, availRows);
-    });
     document.querySelector(`#${this.col}${this.row}`).appendChild(pawn);
+
+    return pawn;
   }
 
   getAvailableMoves() {
@@ -53,7 +53,7 @@ class Pawn {
     });
 
     availRows.forEach((row) => {
-      document.querySelector(`#${this.col}${row}`).className += ' highlighted';
+      document.querySelector(`#${this.col}${row}`).classList.add('highlighted');
     });
   }
 

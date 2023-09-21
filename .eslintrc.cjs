@@ -26,5 +26,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-restricted-syntax': 'off',
     indent: 'off',
+    'class-methods-use-this': 'off',
   },
 };

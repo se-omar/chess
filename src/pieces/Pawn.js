@@ -46,15 +46,21 @@ class Pawn {
   }
 
   highlightMoves(availCols, availRows) {
+    this.removeHighlight();
+
     availCols.forEach((col) => {
-      document
-        .querySelector(`#${col}${this.row}`)
-        .setAttribute('class', 'highlighted');
+      document.querySelector(`#${col}${this.row}`).classList.add('highlighted');
     });
 
     availRows.forEach((row) => {
       document.querySelector(`#${this.col}${row}`).className += ' highlighted';
     });
+  }
+
+  removeHighlight() {
+    document
+      .querySelectorAll('.highlighted')
+      .forEach((el) => el.classList.remove('highlighted'));
   }
 
   // move() {}

@@ -45,24 +45,6 @@ class Pawn {
     return [availCols, availRows];
   }
 
-  highlightMoves(availCols, availRows) {
-    this.removeHighlight();
-
-    availCols.forEach((col) => {
-      document.querySelector(`#${col}${this.row}`).classList.add('highlighted');
-    });
-
-    availRows.forEach((row) => {
-      document.querySelector(`#${this.col}${row}`).classList.add('highlighted');
-    });
-  }
-
-  removeHighlight() {
-    document
-      .querySelectorAll('.highlighted')
-      .forEach((el) => el.classList.remove('highlighted'));
-  }
-
   // move() {}
   //
   // attack() {}

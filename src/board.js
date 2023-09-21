@@ -1,13 +1,24 @@
 import Pawn from './pieces/Pawn';
 import { COLS, ROWS } from './utils/constants';
 
-const handlePieceClick = (piece, element) => {
+function highlightMoves(piece, availCols, availRows) {
+  removeHighlight();
+
+  availCols.forEach((col) => {
+    document.querySelector(`#${col}${piece.row}`).classList.add('highlighted');
+  });
+
+  availRows.forEach((row) => {
+    document.querySelector(`#${piece.col}${row}`).classList.add('highlighted');
+  });
+}
+function handlePieceClick(piece, element) {
   if (!element.classList.contains('clickedPiece')) {
     element.classList.add('clickedPiece');
     const [availCols, availRows] = piece.getAvailableMoves();
-    piece.highlightMoves(availCols, availRows);
+    highlightMoves(piece, availCols, availRows);
   } else {
-    piece.removeHighlight();
+    removeHighlight();
     element.classList.remove('clickedPiece');
   }
 
@@ -16,9 +27,9 @@ const handlePieceClick = (piece, element) => {
       el.classList.remove('clickedPiece');
     }
   });
-};
+}
 
-const renderPiece = (id) => {
+function renderPiece(id) {
   const whitePawn = new Pawn(id[0], id[1], 'white');
   const blackPawn = new Pawn(id[0], id[1], 'black');
   if (id[1] === '7') {
@@ -69,16 +80,24 @@ const renderPiece = (id) => {
   //   default:
   //     return '';
   // }
-};
+}
 
-const movePiece = (e) => {
+function removeHighlight() {
+  document
+    .querySelectorAll('.highlighted')
+    .forEach((el) => el.classList.remove('highlighted'));
+}
+
+function movePiece(e) {
   if (e.target.classList.contains('highlighted')) {
     const clickedPiece = document.querySelector('.clickedPiece');
     e.target.appendChild(clickedPiece);
-  }
-};
 
-export const renderBoard = (element) => {
+    removeHighlight();
+  }
+}
+
+export function renderBoard(element) {
   let rowHtml = '';
   let iswhite = false;
   for (const row of ROWS.reverse()) {
@@ -104,4 +123,4 @@ export const renderBoard = (element) => {
         .addEventListener('click', movePiece);
     }
   }
-};
+}

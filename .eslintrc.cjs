@@ -27,5 +27,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     indent: 'off',
     'class-methods-use-this': 'off',
+    'no-use-before-define': 'off',
   },
 };

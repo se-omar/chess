@@ -1,4 +1,4 @@
-import { ROWS } from '../utils/constants';
+import { COLS, ROWS } from '../utils/constants';
 
 class Pawn {
   moveCount = 0;
@@ -12,7 +12,7 @@ class Pawn {
 
   render() {
     const pawn = document.createElement('img');
-    pawn.classList.add('pieces', 'pawn');
+    pawn.classList.add('pieces', this.color, 'pawn');
     pawn.setAttribute(
       'src',
       `../src/assets/${this.color}Pieces/${this.color}-pawn.png`,
@@ -23,9 +23,49 @@ class Pawn {
     return pawn;
   }
 
-  getAvailableMoves() {
-    const availPositions = [];
+  getAvailAttacks() {
     const sign = this.color === 'white' ? 1 : -1;
+    const availAttacks = [];
+
+    const diagonal1 = document.querySelector(
+      `#${
+        COLS[COLS.indexOf(this.position[0]) + 1]
+        + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign]
+      }`,
+    );
+
+    const diagonal2 = document.querySelector(
+      `#${
+        COLS[COLS.indexOf(this.position[0]) - 1]
+        + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign]
+      }`,
+    );
+    if (
+      diagonal1.firstElementChild
+      && !diagonal1.firstElementChild.classList.contains(this.color)
+    ) {
+      availAttacks.push(
+        COLS[COLS.indexOf(this.position[0]) + 1]
+          + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
+      );
+    }
+
+    if (
+      diagonal2.firstElementChild
+      && !diagonal2.firstElementChild.classList.contains(this.color)
+    ) {
+      availAttacks.push(
+        COLS[COLS.indexOf(this.position[0]) - 1]
+          + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
+      );
+    }
+
+    return availAttacks;
+  }
+
+  getAvailMoves() {
+    const sign = this.color === 'white' ? 1 : -1;
+    const availPositions = [];
     if (this.moveCount === 0) {
       availPositions.push(
         this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],

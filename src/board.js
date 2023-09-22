@@ -1,24 +1,61 @@
 import Pawn from './pieces/Pawn';
 import { COLS, ROWS } from './utils/constants';
 
+export function renderBoard(element) {
+  let rowHtml = '';
+  let iswhite = false;
+  for (const row of ROWS.reverse()) {
+    rowHtml += '<div class="row">';
+    iswhite = !iswhite;
+    for (const col of COLS) {
+      rowHtml += `<span id="${col}${row}" class=${
+        iswhite ? 'white-cell' : 'black-cell'
+      }> </span>`;
+      iswhite = !iswhite;
+    }
+
+    rowHtml += '</div>';
+  }
+
+  element.innerHTML = rowHtml;
+
+  for (const row of ROWS.reverse()) {
+    for (const col of COLS) {
+      renderPiece(col + row);
+      document
+        .querySelector(`#${col}${row}`)
+        .addEventListener('click', movePiece);
+    }
+  }
+}
+
 const pieces = {};
 function addPieces(piece, position) {
   pieces[position] = piece;
 }
 
-function highlightMoves(availPositions) {
-  removeHighlight();
-  availPositions.forEach((pos) => {
-    document.querySelector(`#${pos}`).classList.add('highlighted');
+function markMoves(availMoves) {
+  removeMark();
+  availMoves.forEach((pos) => {
+    document.querySelector(`#${pos}`).classList.add('move');
   });
 }
+
+function markAttacks(availAttacks) {
+  availAttacks.forEach((pos) => {
+    document.querySelector(`#${pos}`).classList.add('attack');
+  });
+}
+
 function handlePieceClick(piece, element) {
   if (!element.classList.contains('clickedPiece')) {
     element.classList.add('clickedPiece');
-    const availPositions = piece.getAvailableMoves(element);
-    highlightMoves(availPositions);
+    const availMoves = piece.getAvailMoves(element);
+    const availAttacks = piece.getAvailAttacks(element);
+    markMoves(availMoves);
+    markAttacks(availAttacks);
   } else {
-    removeHighlight();
+    removeMark();
     element.classList.remove('clickedPiece');
   }
 
@@ -84,14 +121,18 @@ function renderPiece(id) {
   // }
 }
 
-function removeHighlight() {
+function removeMark() {
   document
-    .querySelectorAll('.highlighted')
-    .forEach((el) => el.classList.remove('highlighted'));
+    .querySelectorAll('.move')
+    .forEach((el) => el.classList.remove('move'));
+
+  document
+    .querySelectorAll('.attack')
+    .forEach((el) => el.classList.remove('attack'));
 }
 
 function movePiece(e) {
-  if (e.target.classList.contains('highlighted')) {
+  if (e.target.classList.contains('move')) {
     const clickedPiece = document.querySelector('.clickedPiece');
     const position = clickedPiece.parentElement.id;
     const piece = pieces[position];
@@ -101,34 +142,6 @@ function movePiece(e) {
     pieces[e.target.id] = piece;
     piece.moveCount += 1;
 
-    removeHighlight();
-  }
-}
-
-export function renderBoard(element) {
-  let rowHtml = '';
-  let iswhite = false;
-  for (const row of ROWS.reverse()) {
-    rowHtml += '<div class="row">';
-    iswhite = !iswhite;
-    for (const col of COLS) {
-      rowHtml += `<span id="${col}${row}" class=${
-        iswhite ? 'white' : 'black'
-      }> </span>`;
-      iswhite = !iswhite;
-    }
-
-    rowHtml += '</div>';
-  }
-
-  element.innerHTML = rowHtml;
-
-  for (const row of ROWS.reverse()) {
-    for (const col of COLS) {
-      renderPiece(col + row);
-      document
-        .querySelector(`#${col}${row}`)
-        .addEventListener('click', movePiece);
-    }
+    removeMark();
   }
 }

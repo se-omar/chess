@@ -1,4 +1,4 @@
-.black {
+.black-cell {
   width: 100%;
   height: 100%;
   display: flex;
@@ -7,19 +7,23 @@
   margin: auto;
   background-color: #779556;
 }
-.white {
+.white-cell {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #EEEED2;
+  background-color: #eeeed2;
 }
 
-.highlighted {
-  background-color: #00BFFF90 !important;
-
+.move {
+  background-color: #00bfff90 !important;
 }
+
+.attack {
+  background-color: red !important;
+}
+
 .row {
   height: 100px;
   width: 850px;

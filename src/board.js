@@ -24,7 +24,7 @@ export function renderBoard(element) {
       renderPiece(col + row);
       document
         .querySelector(`#${col}${row}`)
-        .addEventListener('click', movePiece);
+        .addEventListener('click', handleMovePiece);
     }
   }
 }
@@ -48,6 +48,12 @@ function markAttacks(availAttacks) {
 }
 
 function handlePieceClick(piece, element) {
+  if (element.parentElement.classList.contains('attack')) {
+    moveClickedPiece(element.parentElement);
+    removePiece(element);
+    return;
+  }
+
   if (!element.classList.contains('clickedPiece')) {
     element.classList.add('clickedPiece');
     const availMoves = piece.getAvailMoves(element);
@@ -131,17 +137,25 @@ function removeMark() {
     .forEach((el) => el.classList.remove('attack'));
 }
 
-function movePiece(e) {
+function handleMovePiece(e) {
   if (e.target.classList.contains('move')) {
-    const clickedPiece = document.querySelector('.clickedPiece');
-    const position = clickedPiece.parentElement.id;
-    const piece = pieces[position];
-    e.target.appendChild(clickedPiece);
-    piece.position = e.target.id;
-    delete pieces[position];
-    pieces[e.target.id] = piece;
-    piece.moveCount += 1;
-
-    removeMark();
+    moveClickedPiece(e.target);
   }
+}
+
+function moveClickedPiece(el) {
+  const clickedPiece = document.querySelector('.clickedPiece');
+  const position = clickedPiece.parentElement.id;
+  const piece = pieces[position];
+  el.appendChild(clickedPiece);
+  piece.position = el.id;
+  delete pieces[position];
+  pieces[el.id] = piece;
+  piece.moveCount += 1;
+
+  removeMark();
+}
+
+function removePiece(el) {
+  el.remove();
 }

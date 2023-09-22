@@ -27,27 +27,21 @@ class Pawn {
     const sign = this.color === 'white' ? 1 : -1;
     const availAttacks = [];
 
+    const currRowIndex = ROWS.indexOf(this.position[1]);
+    const currColIndex = COLS.indexOf(this.position[0]);
+
     const diagonal1 = document.querySelector(
-      `#${
-        COLS[COLS.indexOf(this.position[0]) + 1]
-        + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign]
-      }`,
+      `#${COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign]}`,
     );
 
     const diagonal2 = document.querySelector(
-      `#${
-        COLS[COLS.indexOf(this.position[0]) - 1]
-        + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign]
-      }`,
+      `#${COLS[currColIndex - 1] + ROWS[currRowIndex + 1 * sign]}`,
     );
     if (
       diagonal1.firstElementChild
       && !diagonal1.firstElementChild.classList.contains(this.color)
     ) {
-      availAttacks.push(
-        COLS[COLS.indexOf(this.position[0]) + 1]
-          + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
-      );
+      availAttacks.push(COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign]);
     }
 
     if (
@@ -55,8 +49,7 @@ class Pawn {
       && !diagonal2.firstElementChild.classList.contains(this.color)
     ) {
       availAttacks.push(
-        COLS[COLS.indexOf(this.position[0]) - 1]
-          + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
+        COLS[COLS.indexOf(this.position[0]) - 1] + ROWS[currRowIndex + 1 * sign],
       );
     }
 
@@ -66,15 +59,15 @@ class Pawn {
   getAvailMoves() {
     const sign = this.color === 'white' ? 1 : -1;
     const availPositions = [];
+    const currRowIndex = ROWS.indexOf(this.position[1]);
     if (this.moveCount === 0) {
       availPositions.push(
-        this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
-        this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 2 * sign],
+        this.position[0] + ROWS[currRowIndex + 1 * sign],
+        this.position[0] + ROWS[currRowIndex + 1 * sign],
+        this.position[0] + ROWS[currRowIndex + 2 * sign],
       );
     } else {
-      availPositions.push(
-        this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
-      );
+      availPositions.push(this.position[0] + ROWS[currRowIndex + 1 * sign]);
     }
 
     return availPositions;

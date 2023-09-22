@@ -60,16 +60,21 @@ class Pawn {
     const sign = this.color === 'white' ? 1 : -1;
     const availPositions = [];
     const currRowIndex = ROWS.indexOf(this.position[1]);
-    if (this.moveCount === 0) {
-      availPositions.push(
-        this.position[0] + ROWS[currRowIndex + 1 * sign],
-        this.position[0] + ROWS[currRowIndex + 1 * sign],
-        this.position[0] + ROWS[currRowIndex + 2 * sign],
-      );
-    } else {
-      availPositions.push(this.position[0] + ROWS[currRowIndex + 1 * sign]);
+    const nextSquarePos = this.position[0] + ROWS[currRowIndex + 1 * sign];
+    const nextNextSquarePos = this.position[0] + ROWS[currRowIndex + 2 * sign];
+    const nextSquareEl = document.querySelector(`#${nextSquarePos}`);
+    const nextNextSquareEl = document.querySelector(`#${nextNextSquarePos}`);
+
+    if (nextSquareEl.firstElementChild) {
+      return [];
     }
 
+    if (nextNextSquareEl.firstElementChild || this.moveCount > 0) {
+      availPositions.push(nextSquarePos);
+      return availPositions;
+    }
+
+    availPositions.push(nextSquarePos, nextNextSquarePos);
     return availPositions;
   }
 

@@ -1,13 +1,12 @@
-import { COLS, ROWS } from '../utils/constants';
+import { ROWS } from '../utils/constants';
 
 class Pawn {
   moveCount = 0;
 
   clicked = false;
 
-  constructor(col, row, color) {
-    this.col = col;
-    this.row = row;
+  constructor(position, color) {
+    this.position = position;
     this.color = color;
   }
 
@@ -19,25 +18,26 @@ class Pawn {
       `../src/assets/${this.color}Pieces/${this.color}-pawn.png`,
     );
 
-    document.querySelector(`#${this.col}${this.row}`).appendChild(pawn);
+    document.querySelector(`#${this.position}`).appendChild(pawn);
 
     return pawn;
   }
 
   getAvailableMoves() {
-    const availCols = [];
-    const availRows = [];
+    const availPositions = [];
     const sign = this.color === 'white' ? 1 : -1;
     if (this.moveCount === 0) {
-      availRows.push(
-        ROWS[ROWS.indexOf(this.row) + 1 * sign],
-        ROWS[ROWS.indexOf(this.row) + 2 * sign],
+      availPositions.push(
+        this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
+        this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 2 * sign],
       );
     } else {
-      availRows.push(ROWS[ROWS.indexOf(this.row) + 1 * sign]);
+      availPositions.push(
+        this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 1 * sign],
+      );
     }
 
-    return [availCols, availRows];
+    return availPositions;
   }
 
   // move() {}

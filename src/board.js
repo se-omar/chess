@@ -6,22 +6,17 @@ function addPieces(piece, position) {
   pieces[position] = piece;
 }
 
-function highlightMoves(piece, availCols, availRows) {
+function highlightMoves(availPositions) {
   removeHighlight();
-
-  availCols.forEach((col) => {
-    document.querySelector(`#${col}${piece.row}`).classList.add('highlighted');
-  });
-
-  availRows.forEach((row) => {
-    document.querySelector(`#${piece.col}${row}`).classList.add('highlighted');
+  availPositions.forEach((pos) => {
+    document.querySelector(`#${pos}`).classList.add('highlighted');
   });
 }
 function handlePieceClick(piece, element) {
   if (!element.classList.contains('clickedPiece')) {
     element.classList.add('clickedPiece');
-    const [availCols, availRows] = piece.getAvailableMoves(element);
-    highlightMoves(piece, availCols, availRows);
+    const availPositions = piece.getAvailableMoves(element);
+    highlightMoves(availPositions);
   } else {
     removeHighlight();
     element.classList.remove('clickedPiece');
@@ -35,8 +30,8 @@ function handlePieceClick(piece, element) {
 }
 
 function renderPiece(id) {
-  const whitePawn = new Pawn(id[0], id[1], 'white');
-  const blackPawn = new Pawn(id[0], id[1], 'black');
+  const whitePawn = new Pawn(id, 'white');
+  const blackPawn = new Pawn(id, 'black');
   if (id[1] === '7') {
     const blackPawnEl = blackPawn.render();
     addPieces(blackPawn, id);
@@ -101,7 +96,7 @@ function movePiece(e) {
     const position = clickedPiece.parentElement.id;
     const piece = pieces[position];
     e.target.appendChild(clickedPiece);
-    [piece.col, piece.row] = e.target.id;
+    piece.position = e.target.id;
     delete pieces[position];
     pieces[e.target.id] = piece;
     piece.moveCount += 1;

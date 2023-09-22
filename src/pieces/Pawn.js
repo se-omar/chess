@@ -29,28 +29,23 @@ class Pawn {
 
     const currRowIndex = ROWS.indexOf(this.position[1]);
     const currColIndex = COLS.indexOf(this.position[0]);
+    const diagonal1Pos = COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign];
+    const diagonal2Pos = COLS[currColIndex - 1] + ROWS[currRowIndex + 1 * sign];
 
-    const diagonal1 = document.querySelector(
-      `#${COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign]}`,
-    );
-
-    const diagonal2 = document.querySelector(
-      `#${COLS[currColIndex - 1] + ROWS[currRowIndex + 1 * sign]}`,
-    );
+    const diagonal1El = document.querySelector(`#${diagonal1Pos}`);
+    const diagonal2El = document.querySelector(`#${diagonal2Pos}`);
     if (
-      diagonal1.firstElementChild
-      && !diagonal1.firstElementChild.classList.contains(this.color)
+      diagonal1El.firstElementChild
+      && !diagonal1El.firstElementChild.classList.contains(this.color)
     ) {
-      availAttacks.push(COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign]);
+      availAttacks.push(diagonal1Pos);
     }
 
     if (
-      diagonal2.firstElementChild
-      && !diagonal2.firstElementChild.classList.contains(this.color)
+      diagonal2El.firstElementChild
+      && !diagonal2El.firstElementChild.classList.contains(this.color)
     ) {
-      availAttacks.push(
-        COLS[COLS.indexOf(this.position[0]) - 1] + ROWS[currRowIndex + 1 * sign],
-      );
+      availAttacks.push(diagonal2Pos);
     }
 
     return availAttacks;

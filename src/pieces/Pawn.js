@@ -34,18 +34,33 @@ class Pawn {
 
     const diagonal1El = document.querySelector(`#${diagonal1Pos}`);
     const diagonal2El = document.querySelector(`#${diagonal2Pos}`);
-    if (
-      diagonal1El.firstElementChild
-      && !diagonal1El.firstElementChild.classList.contains(this.color)
-    ) {
-      availAttacks.push(diagonal1Pos);
-    }
-
-    if (
-      diagonal2El.firstElementChild
-      && !diagonal2El.firstElementChild.classList.contains(this.color)
-    ) {
-      availAttacks.push(diagonal2Pos);
+    if (this.position[0] === 'H') {
+      if (
+        diagonal2El.firstElementChild
+        && !diagonal2El.firstElementChild.classList.contains(this.color)
+      ) {
+        availAttacks.push(diagonal2Pos);
+      }
+    } else if (this.position[0] === 'A') {
+      if (
+        diagonal1El.firstElementChild
+        && !diagonal1El.firstElementChild.classList.contains(this.color)
+      ) {
+        availAttacks.push(diagonal1Pos);
+      }
+    } else {
+      if (
+        diagonal1El.firstElementChild
+        && !diagonal1El.firstElementChild.classList.contains(this.color)
+      ) {
+        availAttacks.push(diagonal1Pos);
+      }
+      if (
+        diagonal2El.firstElementChild
+        && !diagonal2El.firstElementChild.classList.contains(this.color)
+      ) {
+        availAttacks.push(diagonal2Pos);
+      }
     }
 
     return availAttacks;

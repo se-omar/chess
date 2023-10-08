@@ -23,6 +23,14 @@ class Pawn {
     return pawn;
   }
 
+  isAttackValid(el) {
+    return (
+      el
+      && el.firstElementChild
+      && !el.firstElementChild.classList.contains(this.color)
+    );
+  }
+
   getAvailAttacks() {
     const sign = this.color === 'white' ? 1 : -1;
     const availAttacks = [];
@@ -34,33 +42,13 @@ class Pawn {
 
     const diagonal1El = document.querySelector(`#${diagonal1Pos}`);
     const diagonal2El = document.querySelector(`#${diagonal2Pos}`);
-    if (this.position[0] === 'H') {
-      if (
-        diagonal2El.firstElementChild
-        && !diagonal2El.firstElementChild.classList.contains(this.color)
-      ) {
-        availAttacks.push(diagonal2Pos);
-      }
-    } else if (this.position[0] === 'A') {
-      if (
-        diagonal1El.firstElementChild
-        && !diagonal1El.firstElementChild.classList.contains(this.color)
-      ) {
-        availAttacks.push(diagonal1Pos);
-      }
-    } else {
-      if (
-        diagonal1El.firstElementChild
-        && !diagonal1El.firstElementChild.classList.contains(this.color)
-      ) {
-        availAttacks.push(diagonal1Pos);
-      }
-      if (
-        diagonal2El.firstElementChild
-        && !diagonal2El.firstElementChild.classList.contains(this.color)
-      ) {
-        availAttacks.push(diagonal2Pos);
-      }
+
+    if (this.isAttackValid(diagonal1El)) {
+      availAttacks.push(diagonal1Pos);
+    }
+
+    if (this.isAttackValid(diagonal2El)) {
+      availAttacks.push(diagonal2Pos);
     }
 
     return availAttacks;

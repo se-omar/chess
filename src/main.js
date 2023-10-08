@@ -1,5 +1,5 @@
 import './style.css';
-import { renderBoard } from './board';
+import Board from './board';
 
 document.querySelector('#app').innerHTML = `
   <div>
@@ -7,4 +7,5 @@ document.querySelector('#app').innerHTML = `
   </div>
 `;
 
-renderBoard(document.querySelector('#board'));
+const board = new Board();
+board.render(document.querySelector('#board'));

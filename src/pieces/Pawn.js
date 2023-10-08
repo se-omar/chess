@@ -75,10 +75,6 @@ class Pawn {
     availPositions.push(nextSquarePos, nextNextSquarePos);
     return availPositions;
   }
-
-  // move() {}
-  //
-  // attack() {}
 }
 
 export default Pawn;

@@ -28,5 +28,6 @@ module.exports = {
     indent: 'off',
     'class-methods-use-this': 'off',
     'no-use-before-define': 'off',
+    'no-alert': 'off',
   },
 };

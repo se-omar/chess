@@ -16,7 +16,7 @@ class Board {
       for (const col of COLS) {
         rowHtml += `<span id="${col}${row}" class=${
           iswhite ? 'white-cell' : 'black-cell'
-        }> </span>`;
+        }> ${col}${row} </span>`;
         iswhite = !iswhite;
       }
 
@@ -76,9 +76,9 @@ class Board {
     if (!element.classList.contains('clickedPiece')) {
       element.classList.add('clickedPiece');
       const availMoves = piece.getAvailMoves(element);
-      const availAttacks = piece.getAvailAttacks(element);
+      // const availAttacks = piece.getAvailAttacks(element);
       this.markMoves(availMoves);
-      this.markAttacks(availAttacks);
+      // this.markAttacks(availAttacks);
     } else {
       this.removeMark();
       element.classList.remove('clickedPiece');
@@ -135,7 +135,7 @@ class Board {
       //
 
       case 'A1':
-      case 'H1': {
+      case 'D5': {
         const whiteRook = new Rook(id, 'white');
         const whiteRookEl = whiteRook.render();
         this.addPieces(whiteRook, id);

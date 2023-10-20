@@ -31,15 +31,21 @@ class Pawn {
     );
   }
 
-  getAvailAttacks() {
+  getMovesAndAttacks() {
     const sign = this.color === 'white' ? 1 : -1;
+    let availPositions = [];
     const availAttacks = [];
 
     const currRowIndex = ROWS.indexOf(this.position[1]);
     const currColIndex = COLS.indexOf(this.position[0]);
+
+    const nextSquarePos = this.position[0] + ROWS[currRowIndex + 1 * sign];
+    const nextNextSquarePos = this.position[0] + ROWS[currRowIndex + 2 * sign];
+    const nextSquareEl = document.querySelector(`#${nextSquarePos}`);
+    const nextNextSquareEl = document.querySelector(`#${nextNextSquarePos}`);
+
     const diagonal1Pos = COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign];
     const diagonal2Pos = COLS[currColIndex - 1] + ROWS[currRowIndex + 1 * sign];
-
     const diagonal1El = document.querySelector(`#${diagonal1Pos}`);
     const diagonal2El = document.querySelector(`#${diagonal2Pos}`);
 
@@ -51,29 +57,15 @@ class Pawn {
       availAttacks.push(diagonal2Pos);
     }
 
-    return availAttacks;
-  }
-
-  getAvailMoves() {
-    const sign = this.color === 'white' ? 1 : -1;
-    const availPositions = [];
-    const currRowIndex = ROWS.indexOf(this.position[1]);
-    const nextSquarePos = this.position[0] + ROWS[currRowIndex + 1 * sign];
-    const nextNextSquarePos = this.position[0] + ROWS[currRowIndex + 2 * sign];
-    const nextSquareEl = document.querySelector(`#${nextSquarePos}`);
-    const nextNextSquareEl = document.querySelector(`#${nextNextSquarePos}`);
-
     if (nextSquareEl.firstElementChild) {
-      return [];
-    }
-
-    if (nextNextSquareEl.firstElementChild || this.moveCount > 0) {
+      availPositions = [];
+    } else if (nextNextSquareEl.firstElementChild || this.moveCount > 0) {
       availPositions.push(nextSquarePos);
-      return availPositions;
+    } else {
+      availPositions.push(nextSquarePos, nextNextSquarePos);
     }
 
-    availPositions.push(nextSquarePos, nextNextSquarePos);
-    return availPositions;
+    return [availPositions, availAttacks];
   }
 }
 

@@ -75,10 +75,9 @@ class Board {
 
     if (!element.classList.contains('clickedPiece')) {
       element.classList.add('clickedPiece');
-      const availMoves = piece.getAvailMoves(element);
-      // const availAttacks = piece.getAvailAttacks(element);
+      const [availMoves, availAttacks] = piece.getMovesAndAttacks(element);
       this.markMoves(availMoves);
-      // this.markAttacks(availAttacks);
+      this.markAttacks(availAttacks);
     } else {
       this.removeMark();
       element.classList.remove('clickedPiece');

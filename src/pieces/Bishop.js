@@ -1,6 +1,6 @@
 import { COLS, ROWS } from '../utils/constants';
 
-class Rook {
+class Bishop {
   moveCount = 0;
 
   clicked = false;
@@ -11,16 +11,16 @@ class Rook {
   }
 
   render() {
-    const rook = document.createElement('img');
-    rook.classList.add('pieces', this.color, 'rook');
-    rook.setAttribute(
+    const bishop = document.createElement('img');
+    bishop.classList.add('pieces', this.color, 'bishop');
+    bishop.setAttribute(
       'src',
-      `../src/assets/${this.color}Pieces/${this.color}-rook.png`,
+      `../src/assets/${this.color}Pieces/${this.color}-bishop.png`,
     );
 
-    document.querySelector(`#${this.position}`).appendChild(rook);
+    document.querySelector(`#${this.position}`).appendChild(bishop);
 
-    return rook;
+    return bishop;
   }
 
   isAttackValid(el) {
@@ -91,4 +91,4 @@ class Rook {
   }
 }
 
-export default Rook;
+export default Bishop;

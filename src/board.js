@@ -1,4 +1,5 @@
 import Pawn from './pieces/Pawn';
+import Rook from './pieces/Rook';
 import { COLS, ROWS } from './utils/constants';
 
 class Board {
@@ -15,7 +16,7 @@ class Board {
       for (const col of COLS) {
         rowHtml += `<span id="${col}${row}" class=${
           iswhite ? 'white-cell' : 'black-cell'
-        }> </span>`;
+        }> ${col}${row} </span>`;
         iswhite = !iswhite;
       }
 
@@ -74,8 +75,7 @@ class Board {
 
     if (!element.classList.contains('clickedPiece')) {
       element.classList.add('clickedPiece');
-      const availMoves = piece.getAvailMoves(element);
-      const availAttacks = piece.getAvailAttacks(element);
+      const [availMoves, availAttacks] = piece.getMovesAndAttacks(element);
       this.markMoves(availMoves);
       this.markAttacks(availAttacks);
     } else {
@@ -91,9 +91,8 @@ class Board {
   }
 
   renderPiece(id) {
-    const whitePawn = new Pawn(id, 'white');
-    const blackPawn = new Pawn(id, 'black');
     if (id[1] === '7') {
+      const blackPawn = new Pawn(id, 'black');
       const blackPawnEl = blackPawn.render();
       this.addPieces(blackPawn, id);
       blackPawnEl.addEventListener('click', () => {
@@ -101,48 +100,62 @@ class Board {
       });
     }
     if (id[1] === '2') {
+      const whitePawn = new Pawn(id, 'white');
       const whitePawnEl = whitePawn.render();
       this.addPieces(whitePawn, id);
       whitePawnEl.addEventListener('click', () => {
         this.handlePieceClick(whitePawn, whitePawnEl);
       });
     }
-    // switch (id) {
-    //   case 'A8':
-    //   case 'H8':
-    //     return "<img class='pieces' src='../src/assets/blackPieces/black-rook.png' />";
-    //   case 'B8':
-    //   case 'G8':
-    //     return "<img class='pieces' src='../src/assets/blackPieces/black-knight.png' />";
-    //   case 'C8':
-    //   case 'F8':
-    //     return "<img class='pieces' src='../src/assets/blackPieces/black-bishop.png' />";
-    //   case 'D8':
-    //     return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
-    //   case 'E8':
-    //     return "<img class='pieces' src='../src/assets/blackPieces/black-queen.png' />";
-    //
-    //   //
-    //   //  white pieces
-    //   //
-    //
-    //   case 'A1':
-    //   case 'H1':
-    //     return "<img class='pieces' src='../src/assets/whitePieces/white-rook.png' />";
-    //   case 'B1':
-    //   case 'G1':
-    //     return "<img class='pieces' src='../src/assets/whitePieces/white-knight.png' />";
-    //   case 'C1':
-    //   case 'F1':
-    //     return "<img class='pieces' src='../src/assets/whitePieces/white-bishop.png' />";
-    //   case 'D1':
-    //     return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
-    //   case 'E1':
-    //     return "<img class='pieces' src='../src/assets/whitePieces/white-queen.png' />";
-    //
-    //   default:
-    //     return '';
-    // }
+    switch (id) {
+      case 'A8':
+      case 'H8': {
+        const blackRook = new Rook(id, 'black');
+        const blackRookEl = blackRook.render();
+        this.addPieces(blackRook, id);
+        blackRookEl.addEventListener('click', () => {
+          this.handlePieceClick(blackRook, blackRookEl);
+        });
+        break;
+      }
+      // case 'B8':
+      // case 'G8':
+      //   return "<img class='pieces' src='../src/assets/blackPieces/black-knight.png' />";
+      // case 'C8':
+      // case 'F8':
+      //   return "<img class='pieces' src='../src/assets/blackPieces/black-bishop.png' />";
+      // case 'D8':
+      //   return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
+      // case 'E8':
+      //   return "<img class='pieces' src='../src/assets/blackPieces/black-queen.png' />";
+
+      //
+      //  white pieces
+      //
+
+      case 'A1':
+      case 'D5': {
+        const whiteRook = new Rook(id, 'white');
+        const whiteRookEl = whiteRook.render();
+        this.addPieces(whiteRook, id);
+        whiteRookEl.addEventListener('click', () => {
+          this.handlePieceClick(whiteRook, whiteRookEl);
+        });
+        break;
+      }
+      // case 'B1':
+      // case 'G1':
+      //   return "<img class='pieces' src='../src/assets/whitePieces/white-knight.png' />";
+      // case 'C1':
+      // case 'F1':
+      //   return "<img class='pieces' src='../src/assets/whitePieces/white-bishop.png' />";
+      // case 'D1':
+      //   return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
+      // case 'E1':
+      //   return "<img class='pieces' src='../src/assets/whitePieces/white-queen.png' />";
+
+      default:
+    }
   }
 
   removeMark() {

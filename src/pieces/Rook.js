@@ -29,12 +29,6 @@ class Rook {
       && el.firstElementChild
       && !el.firstElementChild.classList.contains(this.color)
     );
-
-    if (el?.firstElementChild) {
-      if (!el.firstElementChild.classList.contains(this.color)) {
-        return;
-      }
-    }
   }
 
   getMovesAndAttacks() {

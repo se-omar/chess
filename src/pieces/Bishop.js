@@ -31,61 +31,92 @@ class Bishop {
     );
   }
 
+  pushDiagSquares(rowSign, colSign, pos) {
+    const row = ROWS.indexOf(pos[1]);
+    const col = COLS.indexOf(pos[0]);
+    const moveSquares = [];
+    const attackSquares = [];
+    let i = 1;
+    while (i < ROWS.length) {
+      const sq = `${COLS[col + i * colSign]}${ROWS[row + i * rowSign]}`;
+      if (sq.includes('undefined')) {
+        break;
+      }
+
+      const sqEl = document.querySelector(`#${sq}`);
+      if (sqEl?.firstElementChild) {
+        if (!sqEl.firstElementChild.classList.contains(this.color)) {
+          attackSquares.push(sq);
+        }
+        break;
+      }
+      moveSquares.push(sq);
+      i += 1;
+    }
+
+    return [moveSquares, attackSquares];
+  }
+
+  getAvailDiags(pos, direction) {
+    switch (direction) {
+      case 'top-right': {
+        const squares = this.pushDiagSquares(1, 1, pos);
+        return squares;
+      }
+
+      case 'top-left': {
+        const squares = this.pushDiagSquares(1, -1, pos);
+        return squares;
+      }
+
+      case 'bottom-right': {
+        const squares = this.pushDiagSquares(-1, 1, pos);
+        return squares;
+      }
+
+      case 'bottom-left': {
+        const squares = this.pushDiagSquares(-1, -1, pos);
+        return squares;
+      }
+
+      default:
+        return [];
+    }
+  }
+
   getMovesAndAttacks() {
     const availPositions = [];
     const availAttacks = [];
-    const rowsBefore = ROWS.filter((r) => r < this.position[1]).reverse();
-    const rowsAfter = ROWS.filter((r) => r > this.position[1]);
-    const colsBefore = COLS.filter((c) => c < this.position[0]).reverse();
-    const colsAfter = COLS.filter((c) => c > this.position[0]);
+    const [topRightMoves, topRightAttacks] = this.getAvailDiags(
+      this.position,
+      'top-right',
+    );
+    const [topLeftMoves, topLeftAttacks] = this.getAvailDiags(
+      this.position,
+      'top-left',
+    );
+    const [bottomRightMoves, bottomRightAttacks] = this.getAvailDiags(
+      this.position,
+      'bottom-right',
+    );
+    const [bottomLeftMoves, bottomLeftAttacks] = this.getAvailDiags(
+      this.position,
+      'bottom-left',
+    );
 
-    for (let i = 0; i < rowsBefore.length; i += 1) {
-      const rb = rowsBefore[i];
-      const nextEl = document.querySelector(`#${this.position[0] + rb}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(this.position[0] + rb);
-        }
-        break;
-      }
-      availPositions.push(this.position[0] + rb);
-    }
+    availPositions.push(
+      ...topRightMoves,
+      ...topLeftMoves,
+      ...bottomLeftMoves,
+      ...bottomRightMoves,
+    );
 
-    for (let i = 0; i < rowsAfter.length; i += 1) {
-      const ra = rowsAfter[i];
-      const nextEl = document.querySelector(`#${this.position[0] + ra}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(this.position[0] + ra);
-        }
-        break;
-      }
-      availPositions.push(this.position[0] + ra);
-    }
-
-    for (let i = 0; i < colsBefore.length; i += 1) {
-      const cb = colsBefore[i];
-      const nextEl = document.querySelector(`#${cb + this.position[1]}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(cb + this.position[1]);
-        }
-        break;
-      }
-      availPositions.push(cb + this.position[1]);
-    }
-
-    for (let i = 0; i < colsAfter.length; i += 1) {
-      const ca = colsAfter[i];
-      const nextEl = document.querySelector(`#${ca + this.position[1]}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(ca + this.position[1]);
-        }
-        break;
-      }
-      availPositions.push(ca + this.position[1]);
-    }
+    availAttacks.push(
+      ...topRightAttacks,
+      ...topLeftAttacks,
+      ...bottomLeftAttacks,
+      ...bottomRightAttacks,
+    );
 
     return [availPositions, availAttacks];
   }

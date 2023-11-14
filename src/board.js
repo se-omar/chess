@@ -134,7 +134,7 @@ class Board {
       //
 
       case 'A1':
-      case 'D5': {
+      case 'H1': {
         const whiteRook = new Rook(id, 'white');
         const whiteRookEl = whiteRook.render();
         this.addPieces(whiteRook, id);

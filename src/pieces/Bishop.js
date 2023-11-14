@@ -23,14 +23,6 @@ class Bishop {
     return bishop;
   }
 
-  isAttackValid(el) {
-    return (
-      el
-      && el.firstElementChild
-      && !el.firstElementChild.classList.contains(this.color)
-    );
-  }
-
   pushDiagSquares(rowSign, colSign, pos) {
     const row = ROWS.indexOf(pos[1]);
     const col = COLS.indexOf(pos[0]);

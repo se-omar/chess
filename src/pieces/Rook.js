@@ -31,6 +31,25 @@ class Rook {
     );
   }
 
+  getAvailRowsOrCols(lineArr, direction) {
+    const availPositions = [];
+    const availAttacks = [];
+    for (let i = 0; i < lineArr.length; i += 1) {
+      const el = lineArr[i];
+      const newPos = direction === 'row' ? this.position[0] + el : el + this.position[1];
+      const nextEl = document.querySelector(`#${newPos}`);
+      if (nextEl?.firstElementChild) {
+        if (!nextEl.firstElementChild.classList.contains(this.color)) {
+          availAttacks.push(newPos);
+        }
+        break;
+      }
+      availPositions.push(newPos);
+    }
+
+    return [availPositions, availAttacks];
+  }
+
   getMovesAndAttacks() {
     const availPositions = [];
     const availAttacks = [];
@@ -39,53 +58,36 @@ class Rook {
     const colsBefore = COLS.filter((c) => c < this.position[0]).reverse();
     const colsAfter = COLS.filter((c) => c > this.position[0]);
 
-    for (let i = 0; i < rowsBefore.length; i += 1) {
-      const rb = rowsBefore[i];
-      const nextEl = document.querySelector(`#${this.position[0] + rb}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(this.position[0] + rb);
-        }
-        break;
-      }
-      availPositions.push(this.position[0] + rb);
-    }
+    const [rowBeforePositions, rowBeforeAttacks] = this.getAvailRowsOrCols(
+      rowsBefore,
+      'row',
+    );
+    const [rowAfterPositions, rowAfterAttacks] = this.getAvailRowsOrCols(
+      rowsAfter,
+      'row',
+    );
+    const [colBeforePositions, colBeforeAttacks] = this.getAvailRowsOrCols(
+      colsBefore,
+      'col',
+    );
+    const [colAfterPositions, colAfterAttacks] = this.getAvailRowsOrCols(
+      colsAfter,
+      'col',
+    );
 
-    for (let i = 0; i < rowsAfter.length; i += 1) {
-      const ra = rowsAfter[i];
-      const nextEl = document.querySelector(`#${this.position[0] + ra}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(this.position[0] + ra);
-        }
-        break;
-      }
-      availPositions.push(this.position[0] + ra);
-    }
+    availPositions.push(
+      ...rowBeforePositions,
+      ...rowAfterPositions,
+      ...colBeforePositions,
+      ...colAfterPositions,
+    );
 
-    for (let i = 0; i < colsBefore.length; i += 1) {
-      const cb = colsBefore[i];
-      const nextEl = document.querySelector(`#${cb + this.position[1]}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(cb + this.position[1]);
-        }
-        break;
-      }
-      availPositions.push(cb + this.position[1]);
-    }
-
-    for (let i = 0; i < colsAfter.length; i += 1) {
-      const ca = colsAfter[i];
-      const nextEl = document.querySelector(`#${ca + this.position[1]}`);
-      if (nextEl?.firstElementChild) {
-        if (!nextEl.firstElementChild.classList.contains(this.color)) {
-          availAttacks.push(ca + this.position[1]);
-        }
-        break;
-      }
-      availPositions.push(ca + this.position[1]);
-    }
+    availAttacks.push(
+      ...rowBeforeAttacks,
+      ...rowAfterAttacks,
+      ...colBeforeAttacks,
+      ...colAfterAttacks,
+    );
 
     return [availPositions, availAttacks];
   }

@@ -58,28 +58,28 @@ class Rook {
     const colsBefore = COLS.filter((c) => c < this.position[0]).reverse();
     const colsAfter = COLS.filter((c) => c > this.position[0]);
 
-    const [rowBeforePositions, rowBeforeAttacks] = this.getAvailRowsOrCols(
+    const [rowBeforeMoves, rowBeforeAttacks] = this.getAvailRowsOrCols(
       rowsBefore,
       'row',
     );
-    const [rowAfterPositions, rowAfterAttacks] = this.getAvailRowsOrCols(
+    const [rowAfterMoves, rowAfterAttacks] = this.getAvailRowsOrCols(
       rowsAfter,
       'row',
     );
-    const [colBeforePositions, colBeforeAttacks] = this.getAvailRowsOrCols(
+    const [colBeforeMoves, colBeforeAttacks] = this.getAvailRowsOrCols(
       colsBefore,
       'col',
     );
-    const [colAfterPositions, colAfterAttacks] = this.getAvailRowsOrCols(
+    const [colAfterMoves, colAfterAttacks] = this.getAvailRowsOrCols(
       colsAfter,
       'col',
     );
 
     availPositions.push(
-      ...rowBeforePositions,
-      ...rowAfterPositions,
-      ...colBeforePositions,
-      ...colAfterPositions,
+      ...rowBeforeMoves,
+      ...rowAfterMoves,
+      ...colBeforeMoves,
+      ...colAfterMoves,
     );
 
     availAttacks.push(

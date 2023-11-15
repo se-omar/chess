@@ -23,9 +23,9 @@ class Queen {
     return queen;
   }
 
-  pushDiagSquares(rowSign, colSign, pos) {
-    const row = ROWS.indexOf(pos[1]);
-    const col = COLS.indexOf(pos[0]);
+  pushDiagSquares(rowSign, colSign) {
+    const row = ROWS.indexOf(this.position[1]);
+    const col = COLS.indexOf(this.position[0]);
     const moveSquares = [];
     const attackSquares = [];
     let i = 1;
@@ -49,25 +49,44 @@ class Queen {
     return [moveSquares, attackSquares];
   }
 
-  getAvailDiags(pos, direction) {
+  getAvailRowsOrCols(lineArr, direction) {
+    const availPositions = [];
+    const availAttacks = [];
+    for (let i = 0; i < lineArr.length; i += 1) {
+      const el = lineArr[i];
+      const newPos = direction === 'row' ? this.position[0] + el : el + this.position[1];
+      const nextEl = document.querySelector(`#${newPos}`);
+      if (nextEl?.firstElementChild) {
+        if (!nextEl.firstElementChild.classList.contains(this.color)) {
+          availAttacks.push(newPos);
+        }
+        break;
+      }
+      availPositions.push(newPos);
+    }
+
+    return [availPositions, availAttacks];
+  }
+
+  getAvailDiags(direction) {
     switch (direction) {
       case 'top-right': {
-        const squares = this.pushDiagSquares(1, 1, pos);
+        const squares = this.pushDiagSquares(1, 1);
         return squares;
       }
 
       case 'top-left': {
-        const squares = this.pushDiagSquares(1, -1, pos);
+        const squares = this.pushDiagSquares(1, -1);
         return squares;
       }
 
       case 'bottom-right': {
-        const squares = this.pushDiagSquares(-1, 1, pos);
+        const squares = this.pushDiagSquares(-1, 1);
         return squares;
       }
 
       case 'bottom-left': {
-        const squares = this.pushDiagSquares(-1, -1, pos);
+        const squares = this.pushDiagSquares(-1, -1);
         return squares;
       }
 
@@ -79,21 +98,31 @@ class Queen {
   getMovesAndAttacks() {
     const availPositions = [];
     const availAttacks = [];
-    const [topRightMoves, topRightAttacks] = this.getAvailDiags(
-      this.position,
-      'top-right',
+    const [topRightMoves, topRightAttacks] = this.getAvailDiags('top-right');
+    const [topLeftMoves, topLeftAttacks] = this.getAvailDiags('top-left');
+    const [bottomRightMoves, bottomRightAttacks] = this.getAvailDiags('bottom-right');
+    const [bottomLeftMoves, bottomLeftAttacks] = this.getAvailDiags('bottom-left');
+
+    const rowsBefore = ROWS.filter((r) => r < this.position[1]).reverse();
+    const rowsAfter = ROWS.filter((r) => r > this.position[1]);
+    const colsBefore = COLS.filter((c) => c < this.position[0]).reverse();
+    const colsAfter = COLS.filter((c) => c > this.position[0]);
+
+    const [rowBeforeMoves, rowBeforeAttacks] = this.getAvailRowsOrCols(
+      rowsBefore,
+      'row',
     );
-    const [topLeftMoves, topLeftAttacks] = this.getAvailDiags(
-      this.position,
-      'top-left',
+    const [rowAfterMoves, rowAfterAttacks] = this.getAvailRowsOrCols(
+      rowsAfter,
+      'row',
     );
-    const [bottomRightMoves, bottomRightAttacks] = this.getAvailDiags(
-      this.position,
-      'bottom-right',
+    const [colBeforeMoves, colBeforeAttacks] = this.getAvailRowsOrCols(
+      colsBefore,
+      'col',
     );
-    const [bottomLeftMoves, bottomLeftAttacks] = this.getAvailDiags(
-      this.position,
-      'bottom-left',
+    const [colAfterMoves, colAfterAttacks] = this.getAvailRowsOrCols(
+      colsAfter,
+      'col',
     );
 
     availPositions.push(
@@ -101,6 +130,11 @@ class Queen {
       ...topLeftMoves,
       ...bottomLeftMoves,
       ...bottomRightMoves,
+
+      ...rowBeforeMoves,
+      ...rowAfterMoves,
+      ...colBeforeMoves,
+      ...colAfterMoves,
     );
 
     availAttacks.push(
@@ -108,6 +142,11 @@ class Queen {
       ...topLeftAttacks,
       ...bottomLeftAttacks,
       ...bottomRightAttacks,
+
+      ...rowBeforeAttacks,
+      ...rowAfterAttacks,
+      ...colBeforeAttacks,
+      ...colAfterAttacks,
     );
 
     return [availPositions, availAttacks];

@@ -11,16 +11,16 @@ class Queen {
   }
 
   render() {
-    const bishop = document.createElement('img');
-    bishop.classList.add('pieces', this.color, 'bishop');
-    bishop.setAttribute(
+    const queen = document.createElement('img');
+    queen.classList.add('pieces', this.color, 'queen');
+    queen.setAttribute(
       'src',
-      `../src/assets/${this.color}Pieces/${this.color}-bishop.png`,
+      `../src/assets/${this.color}Pieces/${this.color}-queen.png`,
     );
 
-    document.querySelector(`#${this.position}`).appendChild(bishop);
+    document.querySelector(`#${this.position}`).appendChild(queen);
 
-    return bishop;
+    return queen;
   }
 
   pushDiagSquares(rowSign, colSign, pos) {

@@ -1,5 +1,6 @@
 import Bishop from './pieces/Bishop';
 import Pawn from './pieces/Pawn';
+import Queen from './pieces/Queen';
 import Rook from './pieces/Rook';
 import { COLS, ROWS } from './utils/constants';
 
@@ -132,10 +133,17 @@ class Board {
         });
         break;
       }
-      // case 'D8':
-      //   return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
       // case 'E8':
-      //   return "<img class='pieces' src='../src/assets/blackPieces/black-queen.png' />";
+      //   return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
+      case 'D8': {
+        const blackQueen = new Queen(id, 'black');
+        const blackQueenEl = blackQueen.render();
+        this.addPieces(blackQueen, id);
+        blackQueenEl.addEventListener('click', () => {
+          this.handlePieceClick(blackQueen, blackQueenEl);
+        });
+        break;
+      }
 
       //
       //  white pieces
@@ -164,10 +172,17 @@ class Board {
         });
         break;
       }
-      // case 'D1':
-      //   return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
       // case 'E1':
-      //   return "<img class='pieces' src='../src/assets/whitePieces/white-queen.png' />";
+      //   return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
+      case 'D1': {
+        const whiteQueen = new Queen(id, 'white');
+        const whiteQueenEl = whiteQueen.render();
+        this.addPieces(whiteQueen, id);
+        whiteQueenEl.addEventListener('click', () => {
+          this.handlePieceClick(whiteQueen, whiteQueenEl);
+        });
+        break;
+      }
 
       default:
     }

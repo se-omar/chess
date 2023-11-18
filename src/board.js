@@ -1,4 +1,5 @@
 import Bishop from './pieces/Bishop';
+import Knight from './pieces/Knight';
 import Pawn from './pieces/Pawn';
 import Queen from './pieces/Queen';
 import Rook from './pieces/Rook';
@@ -120,10 +121,16 @@ class Board {
         });
         break;
       }
-      // case 'B8':
-      // case 'G8':
-      //   return "<img class='pieces' src='../src/assets/blackPieces/black-knight.png' />";
-      case 'C8':
+      case 'B8':
+      case 'G8': {
+        const blackKnight = new Knight(id, 'black');
+        const blackKnightEl = blackKnight.render();
+        this.addPieces(blackKnight, id);
+        blackKnightEl.addEventListener('click', () => {
+          this.handlePieceClick(blackKnight, blackKnightEl);
+        });
+        break;
+      }
       case 'F8': {
         const blackBishop = new Bishop(id, 'black');
         const blackBishopEl = blackBishop.render();
@@ -159,10 +166,16 @@ class Board {
         });
         break;
       }
-      // case 'B1':
-      // case 'G1':
-      //   return "<img class='pieces' src='../src/assets/whitePieces/white-knight.png' />";
-      case 'C1':
+      case 'B1':
+      case 'G1': {
+        const whiteKnight = new Knight(id, 'white');
+        const whiteKnightEl = whiteKnight.render();
+        this.addPieces(whiteKnight, id);
+        whiteKnightEl.addEventListener('click', () => {
+          this.handlePieceClick(whiteKnight, whiteKnightEl);
+        });
+        break;
+      }
       case 'F1': {
         const whiteBishop = new Bishop(id, 'white');
         const whiteBishopEl = whiteBishop.render();

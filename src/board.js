@@ -131,6 +131,7 @@ class Board {
         });
         break;
       }
+      case 'C8':
       case 'F8': {
         const blackBishop = new Bishop(id, 'black');
         const blackBishopEl = blackBishop.render();
@@ -176,6 +177,7 @@ class Board {
         });
         break;
       }
+      case 'C1':
       case 'F1': {
         const whiteBishop = new Bishop(id, 'white');
         const whiteBishopEl = whiteBishop.render();

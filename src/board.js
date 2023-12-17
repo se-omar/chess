@@ -1,4 +1,5 @@
 import Bishop from './pieces/Bishop';
+import King from './pieces/King';
 import Knight from './pieces/Knight';
 import Pawn from './pieces/Pawn';
 import Queen from './pieces/Queen';
@@ -55,13 +56,17 @@ class Board {
   markMoves(availMoves) {
     this.removeMark();
     availMoves.forEach((pos) => {
-      document.querySelector(`#${pos}`).classList.add('move');
+      if (pos) {
+        document.querySelector(`#${pos}`).classList.add('move');
+      }
     });
   }
 
   markAttacks(availAttacks) {
     availAttacks.forEach((pos) => {
-      document.querySelector(`#${pos}`).classList.add('attack');
+      if (pos) {
+        document.querySelector(`#${pos}`).classList.add('attack');
+      }
     });
   }
 
@@ -141,8 +146,15 @@ class Board {
         });
         break;
       }
-      // case 'E8':
-      //   return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
+      case 'E8': {
+        const blackKing = new King(id, 'black');
+        const blackKingEl = blackKing.render();
+        this.addPieces(blackKing, id);
+        blackKingEl.addEventListener('click', () => {
+          this.handlePieceClick(blackKing, blackKingEl);
+        });
+        break;
+      }
       case 'D8': {
         const blackQueen = new Queen(id, 'black');
         const blackQueenEl = blackQueen.render();
@@ -187,8 +199,15 @@ class Board {
         });
         break;
       }
-      // case 'E1':
-      //   return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
+      case 'E4': {
+        const whiteKing = new King(id, 'white');
+        const whiteKingEl = whiteKing.render();
+        this.addPieces(whiteKing, id);
+        whiteKingEl.addEventListener('click', () => {
+          this.handlePieceClick(whiteKing, whiteKingEl);
+        });
+        break;
+      }
       case 'D1': {
         const whiteQueen = new Queen(id, 'white');
         const whiteQueenEl = whiteQueen.render();

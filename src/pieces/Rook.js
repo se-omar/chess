@@ -5,6 +5,8 @@ class Rook {
 
   clicked = false;
 
+  name = 'rook';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;

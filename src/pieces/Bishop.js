@@ -5,6 +5,8 @@ class Bishop {
 
   clicked = false;
 
+  name = 'bishop';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;

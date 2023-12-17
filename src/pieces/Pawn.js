@@ -5,6 +5,8 @@ class Pawn {
 
   clicked = false;
 
+  name = 'pawn';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;

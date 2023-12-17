@@ -5,6 +5,8 @@ class King {
 
   clicked = false;
 
+  name = 'king';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;

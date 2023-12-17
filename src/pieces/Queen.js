@@ -5,6 +5,8 @@ class Queen {
 
   clicked = false;
 
+  name = 'queen';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;

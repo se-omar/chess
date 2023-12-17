@@ -29,5 +29,6 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-use-before-define': 'off',
     'no-alert': 'off',
+    'guard-for-in': 'off',
   },
 };

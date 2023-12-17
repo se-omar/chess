@@ -9,6 +9,8 @@ import { COLS, ROWS } from './utils/constants';
 class Board {
   turn = 'white';
 
+  check = false;
+
   pieces = {};
 
   render(element) {
@@ -71,11 +73,18 @@ class Board {
   }
 
   handlePieceClick(piece, element) {
+    console.log(piece);
     if (element.parentElement.classList.contains('attack')) {
       this.moveClickedPiece(element.parentElement);
       this.removePiece(element);
       return;
     }
+
+    if (this.check && piece.name !== 'king') {
+      alert('move king pls');
+      return;
+    }
+
     if (this.turn !== piece.color) {
       alert(`It's ${this.turn}'s Turn`);
       return;
@@ -232,15 +241,22 @@ class Board {
       .forEach((el) => el.classList.remove('attack'));
   }
 
-  moveClickedPiece(el) {
+  moveClickedPiece(targetEl) {
     const clickedPiece = document.querySelector('.clickedPiece');
     const position = clickedPiece.parentElement.id;
     const piece = this.pieces[position];
-    el.appendChild(clickedPiece);
-    piece.position = el.id;
+    targetEl.appendChild(clickedPiece);
+    piece.position = targetEl.id;
     delete this.pieces[position];
-    this.pieces[el.id] = piece;
+    this.pieces[targetEl.id] = piece;
     piece.moveCount += 1;
+
+    if (this.isKingChecked()) {
+      this.check = true;
+      alert('king check');
+    } else {
+      this.check = false;
+    }
 
     this.removeMark();
     this.switchTurns();
@@ -250,6 +266,24 @@ class Board {
     if (e.target.classList.contains('move')) {
       this.moveClickedPiece(e.target);
     }
+  }
+
+  isKingChecked() {
+    let kingPos;
+    for (const pos in this.pieces) {
+      const piece = this.pieces[pos];
+      if (piece.name === 'king' && piece.color !== this.turn) {
+        kingPos = pos;
+      }
+    }
+
+    for (const pos in this.pieces) {
+      const [availMoves, availAttacks] = this.pieces[pos].getMovesAndAttacks();
+      if (availAttacks.includes(kingPos)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   removePiece(el) {

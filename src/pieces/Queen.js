@@ -51,6 +51,31 @@ class Queen {
     return [moveSquares, attackSquares];
   }
 
+  pushPossibleSquares(rowSign, colSign) {
+    const row = ROWS.indexOf(this.position[1]);
+    const col = COLS.indexOf(this.position[0]);
+    const attackSquares = [];
+    let i = 1;
+    while (i < ROWS.length) {
+      const sq = `${COLS[col + i * colSign]}${ROWS[row + i * rowSign]}`;
+      if (sq.includes('undefined')) {
+        break;
+      }
+
+      const sqEl = document.querySelector(`#${sq}`);
+      if (
+        sqEl?.firstElementChild
+        && sqEl.firstElementChild.classList.contains(this.color)
+      ) {
+        break;
+      }
+      attackSquares.push(sq);
+      i += 1;
+    }
+
+    return attackSquares;
+  }
+
   getAvailRowsOrCols(lineArr, direction) {
     const availPositions = [];
     const availAttacks = [];
@@ -95,6 +120,67 @@ class Queen {
       default:
         return [];
     }
+  }
+
+  getPossibleDiags(direction) {
+    switch (direction) {
+      case 'top-right': {
+        const squares = this.pushPossibleSquares(1, 1);
+        return squares;
+      }
+
+      case 'top-left': {
+        const squares = this.pushPossibleSquares(1, -1);
+        return squares;
+      }
+
+      case 'bottom-right': {
+        const squares = this.pushPossibleSquares(-1, 1);
+        return squares;
+      }
+
+      case 'bottom-left': {
+        const squares = this.pushPossibleSquares(-1, -1);
+        return squares;
+      }
+
+      default:
+        return [];
+    }
+  }
+
+  getPossibleAttacks() {
+    const attacks = [];
+    const topRightAttacks = this.getPossibleDiags('top-right');
+    const topLeftAttacks = this.getPossibleDiags('top-left');
+    const bottomRightAttacks = this.getPossibleDiags('bottom-right');
+    const bottomLeftAttacks = this.getPossibleDiags('bottom-left');
+
+    const rowsBefore = ROWS.filter((r) => r < this.position[1]).reverse();
+    const rowsAfter = ROWS.filter((r) => r > this.position[1]);
+    const colsBefore = COLS.filter((c) => c < this.position[0]).reverse();
+    const colsAfter = COLS.filter((c) => c > this.position[0]);
+
+    // const rowBeforeAttacks = this.getPossibleRowsOrCols(rowsBefore, 'row');
+    // const rowAfterAttacks = this.getPossibleRowsOrCols(rowsAfter, 'row');
+    // const colBeforeAttacks = this.getPossibleRowsOrCols(colsBefore, 'col');
+    // const colAfterAttacks = this.getPossibleRowsOrCols(colsAfter, 'col');
+
+    attacks.push(
+      ...topRightAttacks,
+      ...topLeftAttacks,
+      ...bottomLeftAttacks,
+      ...bottomRightAttacks,
+
+      // ...rowBeforeAttacks,
+      // ...rowAfterAttacks,
+      // ...colBeforeAttacks,
+      // ...colAfterAttacks,
+    );
+
+    console.log('queen attacks: ', attacks);
+
+    return attacks;
   }
 
   getMovesAndAttacks() {

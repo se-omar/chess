@@ -92,6 +92,10 @@ class King {
     return [availPosition, availAttack];
   }
 
+  getPossibleAttacks() {
+    return [];
+  }
+
   getMovesAndAttacks(pieces) {
     const availPositions = [];
     const availAttacks = [];
@@ -136,30 +140,16 @@ class King {
 
     for (const pos in pieces) {
       if (pieces[pos].color !== this.color) {
-        let pieceAvailAttacks = [];
-        let pieceAvailMoves = [];
-        if (pieces[pos].name === 'pawn' || pieces[pos].name === 'bishop') {
-          pieceAvailAttacks = pieces[pos].getPossibleAttacks();
-        } else {
-          [pieceAvailMoves, pieceAvailAttacks] = pieces[pos].getMovesAndAttacks();
-        }
-        console.log('piece attakcs: ', pieceAvailAttacks);
+        const possibleAttacks = pieces[pos].getPossibleAttacks();
 
         availAttacks.forEach((att, idx) => {
-          if (
-            pieceAvailAttacks.includes(att)
-            || pieceAvailMoves.includes(att)
-          ) {
-            console.log(pieceAvailMoves);
+          if (possibleAttacks.includes(att)) {
             availAttacks.splice(idx, 1);
           }
         });
 
         availPositions.forEach((avPos, idx) => {
-          if (
-            pieceAvailAttacks.includes(avPos)
-            || pieceAvailMoves.includes(avPos)
-          ) {
+          if (possibleAttacks.includes(avPos)) {
             availPositions.splice(idx, 1);
           }
         });

@@ -73,6 +73,10 @@ class Knight {
     return [];
   }
 
+  getPossibleAttacks() {
+    return [];
+  }
+
   getMovesAndAttacks() {
     const [moveUpRow, attackUpRow] = this.getDirectionMovesAttacks(1, 'row');
     const [moveDownRow, attackDownRow] = this.getDirectionMovesAttacks(

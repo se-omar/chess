@@ -52,6 +52,10 @@ class Rook {
     return [availPositions, availAttacks];
   }
 
+  getPossibleAttacks() {
+    return [];
+  }
+
   getMovesAndAttacks() {
     const availPositions = [];
     const availAttacks = [];

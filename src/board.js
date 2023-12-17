@@ -210,7 +210,7 @@ class Board {
         });
         break;
       }
-      case 'E4': {
+      case 'F5': {
         const whiteKing = new King(id, 'white');
         const whiteKingEl = whiteKing.render();
         this.addPieces(whiteKing, id);

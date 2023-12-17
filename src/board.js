@@ -92,7 +92,9 @@ class Board {
 
     if (!element.classList.contains('clickedPiece')) {
       element.classList.add('clickedPiece');
-      const [availMoves, availAttacks] = piece.getMovesAndAttacks(element);
+      // if (piece.name === 'king') {
+      // }
+      const [availMoves, availAttacks] = piece.getMovesAndAttacks(this.pieces);
       this.markMoves(availMoves);
       this.markAttacks(availAttacks);
     } else {

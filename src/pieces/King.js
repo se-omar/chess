@@ -25,7 +25,17 @@ class King {
     return king;
   }
 
-  pushDiagSquares(rowSign, colSign) {
+  isSquareDefended(sq, pieces) {
+    for (const pos in pieces) {
+      const [availMoves, availAttacks] = pieces[pos].getMovesAndAttacks();
+      if (availAttacks.includes(sq)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  pushDiagSquares(rowSign, colSign, pieces) {
     const row = ROWS.indexOf(this.position[1]);
     const col = COLS.indexOf(this.position[0]);
     let moveSquare;
@@ -35,7 +45,12 @@ class King {
       return [null, null];
     }
 
+    if (this.isSquareDefended(sq, pieces)) {
+      return [null, null];
+    }
+
     const sqEl = document.querySelector(`#${sq}`);
+
     if (sqEl?.firstElementChild) {
       if (!sqEl.firstElementChild.classList.contains(this.color)) {
         attackSquare = sq;
@@ -47,25 +62,25 @@ class King {
     return [moveSquare, attackSquare];
   }
 
-  getAvailDiags(direction) {
+  getAvailDiags(direction, pieces) {
     switch (direction) {
       case 'top-right': {
-        const squares = this.pushDiagSquares(1, 1);
+        const squares = this.pushDiagSquares(1, 1, pieces);
         return squares;
       }
 
       case 'top-left': {
-        const squares = this.pushDiagSquares(1, -1);
+        const squares = this.pushDiagSquares(1, -1, pieces);
         return squares;
       }
 
       case 'bottom-right': {
-        const squares = this.pushDiagSquares(-1, 1);
+        const squares = this.pushDiagSquares(-1, 1, pieces);
         return squares;
       }
 
       case 'bottom-left': {
-        const squares = this.pushDiagSquares(-1, -1);
+        const squares = this.pushDiagSquares(-1, -1, pieces);
         return squares;
       }
 
@@ -99,10 +114,19 @@ class King {
   getMovesAndAttacks(pieces) {
     const availPositions = [];
     const availAttacks = [];
-    const [topRightMove, topRightAttack] = this.getAvailDiags('top-right');
-    const [topLeftMove, topLeftAttack] = this.getAvailDiags('top-left');
-    const [bottomRightMove, bottomRightAttack] = this.getAvailDiags('bottom-right');
-    const [bottomLeftMove, bottomLeftAttack] = this.getAvailDiags('bottom-left');
+    const [topRightMove, topRightAttack] = this.getAvailDiags(
+      'top-right',
+      pieces,
+    );
+    const [topLeftMove, topLeftAttack] = this.getAvailDiags('top-left', pieces);
+    const [bottomRightMove, bottomRightAttack] = this.getAvailDiags(
+      'bottom-right',
+      pieces,
+    );
+    const [bottomLeftMove, bottomLeftAttack] = this.getAvailDiags(
+      'bottom-left',
+      pieces,
+    );
 
     const rowBefore = this.position[0] + ROWS[ROWS.indexOf(this.position[1]) - 1];
     const rowAfter = this.position[0] + ROWS[ROWS.indexOf(this.position[1]) + 1];

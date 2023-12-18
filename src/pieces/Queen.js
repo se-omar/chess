@@ -76,6 +76,24 @@ class Queen {
     return attackSquares;
   }
 
+  getPossibleRowsOrCols(lineArr, direction) {
+    const attacks = [];
+    for (let i = 0; i < lineArr.length; i += 1) {
+      const el = lineArr[i];
+      const newPos = direction === 'row' ? this.position[0] + el : el + this.position[1];
+      const nextEl = document.querySelector(`#${newPos}`);
+      if (
+        nextEl?.firstElementChild
+        && nextEl.firstElementChild.classList.contains(this.color)
+      ) {
+        break;
+      }
+      attacks.push(newPos);
+    }
+
+    return attacks;
+  }
+
   getAvailRowsOrCols(lineArr, direction) {
     const availPositions = [];
     const availAttacks = [];
@@ -161,10 +179,10 @@ class Queen {
     const colsBefore = COLS.filter((c) => c < this.position[0]).reverse();
     const colsAfter = COLS.filter((c) => c > this.position[0]);
 
-    // const rowBeforeAttacks = this.getPossibleRowsOrCols(rowsBefore, 'row');
-    // const rowAfterAttacks = this.getPossibleRowsOrCols(rowsAfter, 'row');
-    // const colBeforeAttacks = this.getPossibleRowsOrCols(colsBefore, 'col');
-    // const colAfterAttacks = this.getPossibleRowsOrCols(colsAfter, 'col');
+    const rowBeforeAttacks = this.getPossibleRowsOrCols(rowsBefore, 'row');
+    const rowAfterAttacks = this.getPossibleRowsOrCols(rowsAfter, 'row');
+    const colBeforeAttacks = this.getPossibleRowsOrCols(colsBefore, 'col');
+    const colAfterAttacks = this.getPossibleRowsOrCols(colsAfter, 'col');
 
     attacks.push(
       ...topRightAttacks,
@@ -172,13 +190,11 @@ class Queen {
       ...bottomLeftAttacks,
       ...bottomRightAttacks,
 
-      // ...rowBeforeAttacks,
-      // ...rowAfterAttacks,
-      // ...colBeforeAttacks,
-      // ...colAfterAttacks,
+      ...rowBeforeAttacks,
+      ...rowAfterAttacks,
+      ...colBeforeAttacks,
+      ...colAfterAttacks,
     );
-
-    console.log('queen attacks: ', attacks);
 
     return attacks;
   }

@@ -8,7 +8,7 @@ import { COLS, ROWS } from './utils/constants';
 import { isArrayValid } from './utils/helperFns';
 
 class Board {
-  turn = 'black';
+  turn = 'white';
 
   check = false;
 

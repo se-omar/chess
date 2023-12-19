@@ -67,6 +67,7 @@ class Bishop {
         sqEl?.firstElementChild
         && sqEl.firstElementChild.classList.contains(this.color)
       ) {
+        attackSquares.push(sq);
         break;
       }
       attackSquares.push(sq);

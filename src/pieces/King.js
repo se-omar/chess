@@ -7,6 +7,8 @@ class King {
 
   name = 'king';
 
+  check = false;
+
   constructor(position, color) {
     this.position = position;
     this.color = color;

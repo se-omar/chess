@@ -67,6 +67,7 @@ class Queen {
         sqEl?.firstElementChild
         && sqEl.firstElementChild.classList.contains(this.color)
       ) {
+        attackSquares.push(sq);
         break;
       }
       attackSquares.push(sq);
@@ -89,7 +90,6 @@ class Queen {
         attacks.push(newPos);
         break;
       }
-      console.log('queen pos: ', newPos);
       attacks.push(newPos);
     }
 

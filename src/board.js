@@ -152,7 +152,7 @@ class Board {
         });
         break;
       }
-      case 'G5':
+      case 'C8':
       case 'F8': {
         const blackBishop = new Bishop(id, 'black');
         const blackBishopEl = blackBishop.render();
@@ -171,7 +171,7 @@ class Board {
         });
         break;
       }
-      case 'F4': {
+      case 'D8': {
         const blackQueen = new Queen(id, 'black');
         const blackQueenEl = blackQueen.render();
         this.addPieces(blackQueen, id);
@@ -215,7 +215,7 @@ class Board {
         });
         break;
       }
-      case 'H5': {
+      case 'E1': {
         const whiteKing = new King(id, 'white');
         const whiteKingEl = whiteKing.render();
         this.addPieces(whiteKing, id);

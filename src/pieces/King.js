@@ -27,8 +27,8 @@ class King {
 
   isSquareDefended(sq, pieces) {
     for (const pos in pieces) {
-      const [availMoves, availAttacks] = pieces[pos].getMovesAndAttacks();
-      if (availAttacks.includes(sq)) {
+      const availAttacks = pieces[pos].getPossibleAttacks();
+      if (pieces[pos].color !== this.color && availAttacks?.includes(sq)) {
         return true;
       }
     }
@@ -89,10 +89,15 @@ class King {
     }
   }
 
-  getAvailRowsOrCols(sq) {
+  getAvailRowsOrCols(sq, pieces) {
     if (sq.includes('undefined')) {
       return [null, null];
     }
+
+    if (this.isSquareDefended(sq, pieces)) {
+      return [null, null];
+    }
+
     let availPosition;
     let availAttack;
     const nextEl = document.querySelector(`#${sq}`);
@@ -133,10 +138,22 @@ class King {
     const colBefore = COLS[COLS.indexOf(this.position[0]) - 1] + this.position[1];
     const colAfter = COLS[COLS.indexOf(this.position[0]) + 1] + this.position[1];
 
-    const [rowBeforeMove, rowBeforeAttack] = this.getAvailRowsOrCols(rowBefore);
-    const [rowAfterMove, rowAfterAttack] = this.getAvailRowsOrCols(rowAfter);
-    const [colBeforeMove, colBeforeAttack] = this.getAvailRowsOrCols(colBefore);
-    const [colAfterMove, colAfterAttack] = this.getAvailRowsOrCols(colAfter);
+    const [rowBeforeMove, rowBeforeAttack] = this.getAvailRowsOrCols(
+      rowBefore,
+      pieces,
+    );
+    const [rowAfterMove, rowAfterAttack] = this.getAvailRowsOrCols(
+      rowAfter,
+      pieces,
+    );
+    const [colBeforeMove, colBeforeAttack] = this.getAvailRowsOrCols(
+      colBefore,
+      pieces,
+    );
+    const [colAfterMove, colAfterAttack] = this.getAvailRowsOrCols(
+      colAfter,
+      pieces,
+    );
 
     availPositions.push(
       topRightMove,

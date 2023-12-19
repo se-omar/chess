@@ -86,8 +86,10 @@ class Queen {
         nextEl?.firstElementChild
         && nextEl.firstElementChild.classList.contains(this.color)
       ) {
+        attacks.push(newPos);
         break;
       }
+      console.log('queen pos: ', newPos);
       attacks.push(newPos);
     }
 

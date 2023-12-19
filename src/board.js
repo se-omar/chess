@@ -261,6 +261,7 @@ class Board {
     const [kingChecked, king] = this.isKingChecked();
 
     if (kingChecked) {
+      this.check = true;
       king.check = true;
       // alert('king check');
     } else {

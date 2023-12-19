@@ -5,6 +5,8 @@ class Pawn {
 
   clicked = false;
 
+  name = 'pawn';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;
@@ -29,6 +31,29 @@ class Pawn {
       && el.firstElementChild
       && !el.firstElementChild.classList.contains(this.color)
     );
+  }
+
+  getPossibleAttacks() {
+    const sign = this.color === 'white' ? 1 : -1;
+    const attacks = [];
+
+    const currRowIndex = ROWS.indexOf(this.position[1]);
+    const currColIndex = COLS.indexOf(this.position[0]);
+
+    const diagonal1Pos = COLS[currColIndex + 1] + ROWS[currRowIndex + 1 * sign];
+    const diagonal2Pos = COLS[currColIndex - 1] + ROWS[currRowIndex + 1 * sign];
+    const diagonal1El = document.querySelector(`#${diagonal1Pos}`);
+    const diagonal2El = document.querySelector(`#${diagonal2Pos}`);
+
+    if (diagonal1El && !diagonal1El.firstElementChild) {
+      attacks.push(diagonal1Pos);
+    }
+
+    if (diagonal2El && !diagonal2El.firstElementChild) {
+      attacks.push(diagonal2Pos);
+    }
+
+    return attacks;
   }
 
   getMovesAndAttacks() {

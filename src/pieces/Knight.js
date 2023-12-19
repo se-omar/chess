@@ -5,6 +5,8 @@ class Knight {
 
   clicked = false;
 
+  name = 'knight';
+
   constructor(position, color) {
     this.position = position;
     this.color = color;
@@ -68,6 +70,10 @@ class Knight {
 
       return this.pushSquares(col, leftRow, rightRow, direction);
     }
+    return [];
+  }
+
+  getPossibleAttacks() {
     return [];
   }
 

@@ -1,12 +1,20 @@
 import Bishop from './pieces/Bishop';
+import King from './pieces/King';
 import Knight from './pieces/Knight';
 import Pawn from './pieces/Pawn';
 import Queen from './pieces/Queen';
 import Rook from './pieces/Rook';
 import { COLS, ROWS } from './utils/constants';
+import { isArrayValid } from './utils/helperFns';
 
 class Board {
-  turn = 'white';
+  turn = 'black';
+
+  check = false;
+
+  checkMate = false;
+
+  stalemate = false;
 
   pieces = {};
 
@@ -55,13 +63,17 @@ class Board {
   markMoves(availMoves) {
     this.removeMark();
     availMoves.forEach((pos) => {
-      document.querySelector(`#${pos}`).classList.add('move');
+      if (pos) {
+        document.querySelector(`#${pos}`).classList.add('move');
+      }
     });
   }
 
   markAttacks(availAttacks) {
     availAttacks.forEach((pos) => {
-      document.querySelector(`#${pos}`).classList.add('attack');
+      if (pos) {
+        document.querySelector(`#${pos}`).classList.add('attack');
+      }
     });
   }
 
@@ -71,6 +83,12 @@ class Board {
       this.removePiece(element);
       return;
     }
+
+    if (this.check && piece.name !== 'king') {
+      alert('move king pls');
+      return;
+    }
+
     if (this.turn !== piece.color) {
       alert(`It's ${this.turn}'s Turn`);
       return;
@@ -78,7 +96,10 @@ class Board {
 
     if (!element.classList.contains('clickedPiece')) {
       element.classList.add('clickedPiece');
-      const [availMoves, availAttacks] = piece.getMovesAndAttacks(element);
+      const [availMoves, availAttacks] = piece.getMovesAndAttacks(this.pieces);
+
+      // if (piece.name === 'king') {
+      // }
       this.markMoves(availMoves);
       this.markAttacks(availAttacks);
     } else {
@@ -131,7 +152,7 @@ class Board {
         });
         break;
       }
-      case 'C8':
+      case 'G5':
       case 'F8': {
         const blackBishop = new Bishop(id, 'black');
         const blackBishopEl = blackBishop.render();
@@ -141,9 +162,16 @@ class Board {
         });
         break;
       }
-      // case 'E8':
-      //   return "<img class='pieces' src='../src/assets/blackPieces/black-king.png' />";
-      case 'D8': {
+      case 'E8': {
+        const blackKing = new King(id, 'black');
+        const blackKingEl = blackKing.render();
+        this.addPieces(blackKing, id);
+        blackKingEl.addEventListener('click', () => {
+          this.handlePieceClick(blackKing, blackKingEl);
+        });
+        break;
+      }
+      case 'F4': {
         const blackQueen = new Queen(id, 'black');
         const blackQueenEl = blackQueen.render();
         this.addPieces(blackQueen, id);
@@ -187,8 +215,15 @@ class Board {
         });
         break;
       }
-      // case 'E1':
-      //   return "<img class='pieces' src='../src/assets/whitePieces/white-king.png' />";
+      case 'H5': {
+        const whiteKing = new King(id, 'white');
+        const whiteKingEl = whiteKing.render();
+        this.addPieces(whiteKing, id);
+        whiteKingEl.addEventListener('click', () => {
+          this.handlePieceClick(whiteKing, whiteKingEl);
+        });
+        break;
+      }
       case 'D1': {
         const whiteQueen = new Queen(id, 'white');
         const whiteQueenEl = whiteQueen.render();
@@ -213,15 +248,37 @@ class Board {
       .forEach((el) => el.classList.remove('attack'));
   }
 
-  moveClickedPiece(el) {
+  moveClickedPiece(targetEl) {
     const clickedPiece = document.querySelector('.clickedPiece');
     const position = clickedPiece.parentElement.id;
     const piece = this.pieces[position];
-    el.appendChild(clickedPiece);
-    piece.position = el.id;
+    targetEl.appendChild(clickedPiece);
+    piece.position = targetEl.id;
     delete this.pieces[position];
-    this.pieces[el.id] = piece;
+    this.pieces[targetEl.id] = piece;
     piece.moveCount += 1;
+
+    const [kingChecked, king] = this.isKingChecked();
+
+    if (kingChecked) {
+      this.check = true;
+      king.check = true;
+      // alert('king check');
+    } else {
+      king.check = false;
+    }
+
+    const [kingMoves, kingAttacks] = this.getKingMovesAndAttacks();
+
+    if (this.isKingDead(kingMoves, kingAttacks, king)) {
+      this.checkMate = true;
+      alert('checkmate');
+    }
+
+    if (this.isStalemate(kingMoves, kingAttacks, king)) {
+      this.stalemate = true;
+      alert('stalemate');
+    }
 
     this.removeMark();
     this.switchTurns();
@@ -231,6 +288,52 @@ class Board {
     if (e.target.classList.contains('move')) {
       this.moveClickedPiece(e.target);
     }
+  }
+
+  isKingChecked() {
+    const kingPos = this.getKingPosition();
+
+    for (const pos in this.pieces) {
+      const [availMoves, availAttacks] = this.pieces[pos].getMovesAndAttacks();
+      if (availAttacks.includes(kingPos)) {
+        return [true, this.pieces[kingPos]];
+      }
+    }
+    return [false, this.pieces[kingPos]];
+  }
+
+  getKingPosition() {
+    for (const pos in this.pieces) {
+      const piece = this.pieces[pos];
+      if (piece.name === 'king' && piece.color !== this.turn) {
+        return pos;
+      }
+    }
+
+    return '';
+  }
+
+  isKingDead(kingMoves, kingAttacks, king) {
+    if (king.check && !isArrayValid(kingMoves) && !isArrayValid(kingAttacks)) {
+      return true;
+    }
+    return false;
+  }
+
+  isStalemate(kingMoves, kingAttacks, king) {
+    if (!king.check && !isArrayValid(kingMoves) && !isArrayValid(kingAttacks)) {
+      return true;
+    }
+    return false;
+  }
+
+  getKingMovesAndAttacks() {
+    const kingPos = this.getKingPosition();
+    const [kingMoves, kingAttacks] = this.pieces[kingPos].getMovesAndAttacks(
+      this.pieces,
+    );
+
+    return [kingMoves, kingAttacks];
   }
 
   removePiece(el) {

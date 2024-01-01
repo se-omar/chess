@@ -7,6 +7,7 @@ if (!username) {
   document.querySelector('#loginBtn').addEventListener('click', handleLogin);
 } else {
   renderBoard();
+  document.querySelector('#myName').innerHTML = username;
   const board = new Board();
   board.render(document.querySelector('#board'));
   board.dial();
@@ -24,7 +25,9 @@ function renderLogin() {
 function renderBoard() {
   document.querySelector('#app').innerHTML = `
   <div>
+    <h2 id="opName"></h2>
     <div id="board"></div>
+    <h2 id="myName"></h2>
   </div>
 `;
 }

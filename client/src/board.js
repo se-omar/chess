@@ -41,8 +41,13 @@ class Board {
         return;
       }
       console.log('dataaa: ', JSON.parse(ev.data));
-      const [from, to] = ev.data.split(' ');
-      this.moveClickedPiece(from, to);
+      const data = JSON.parse(ev.data);
+      const username = localStorage.getItem('username');
+
+      if (username === data.username) {
+        return;
+      }
+      this.moveClickedPiece(data.from, data.to);
       if (expectingMessage) {
         expectingMessage = false;
       }

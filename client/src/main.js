@@ -1,26 +1,12 @@
 import './style.css';
 import Board from './board';
 
-const username = localStorage.getItem('username');
+const username = JSON.parse(sessionStorage.getItem('username'));
 if (!username) {
-  renderLogin();
-  document.querySelector('#loginBtn').addEventListener('click', handleLogin);
-} else {
-  renderBoard();
-  document.querySelector('#myName').innerHTML = username;
-  const board = new Board();
-  board.render(document.querySelector('#board'));
-  board.dial();
+  const inputt = prompt('Enter your Username');
+  sessionStorage.setItem('username', inputt);
 }
-
-function renderLogin() {
-  document.querySelector('#app').innerHTML = `
-  <div>
-    <input type="text" id="userInput" />
-    <button id="loginBtn" type="button">Sign in</button>
-  </div>
-`;
-}
+renderBoard();
 
 function renderBoard() {
   document.querySelector('#app').innerHTML = `
@@ -30,13 +16,9 @@ function renderBoard() {
     <h2 id="myName"></h2>
   </div>
 `;
-}
 
-function handleLogin() {
-  const userInput = document.querySelector('#userInput').value;
-  if (!userInput) {
-    alert('enter a valid username');
-  }
-  localStorage.setItem('username', userInput);
-  renderBoard();
+  document.querySelector('#myName').innerHTML = sessionStorage.getItem('username');
+  const board = new Board();
+  board.render(document.querySelector('#board'));
+  board.dial();
 }

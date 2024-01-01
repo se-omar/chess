@@ -41,7 +41,7 @@ class Board {
       }
       console.log('dataaa: ', JSON.parse(ev.data));
       const data = JSON.parse(ev.data);
-      const username = localStorage.getItem('username');
+      const username = sessionStorage.getItem('username');
 
       if (username === data.username) {
         return;
@@ -52,7 +52,7 @@ class Board {
   }
 
   publishMove(from, to) {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('username');
     const body = JSON.stringify({
       from,
       to,

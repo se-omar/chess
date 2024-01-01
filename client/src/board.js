@@ -123,12 +123,10 @@ class Board {
     }
 
     if (this.check && piece.name !== 'king') {
-      alert('move king pls');
       return;
     }
 
     if (this.turn !== piece.color) {
-      alert(`It's ${this.turn}'s Turn`);
       return;
     }
 
@@ -136,8 +134,6 @@ class Board {
       element.classList.add('clickedPiece');
       const [availMoves, availAttacks] = piece.getMovesAndAttacks(this.pieces);
 
-      // if (piece.name === 'king') {
-      // }
       this.markMoves(availMoves);
       this.markAttacks(availAttacks);
     } else {
@@ -299,10 +295,11 @@ class Board {
     const [kingChecked, king] = this.isKingChecked();
 
     if (kingChecked) {
+      document.querySelector(`#${king.position}`).classList.add('checked');
       this.check = true;
       king.check = true;
-      // alert('king check');
     } else {
+      document.querySelector(`#${king.position}`).classList.remove('checked');
       king.check = false;
     }
 
@@ -313,10 +310,10 @@ class Board {
       alert('checkmate');
     }
 
-    if (this.isStalemate(kingMoves, kingAttacks, king)) {
-      this.stalemate = true;
-      alert('stalemate');
-    }
+    // if (this.isStalemate(kingMoves, kingAttacks, king)) {
+    //   this.stalemate = true;
+    //   alert('stalemate');
+    // }
 
     this.removeMark();
     this.switchTurns();

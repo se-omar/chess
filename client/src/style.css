@@ -24,6 +24,10 @@
   background-color: red !important;
 }
 
+.checked {
+  background-color: purple !important;
+}
+
 .row {
   height: 100px;
   width: 850px;

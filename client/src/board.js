@@ -7,6 +7,8 @@ import Rook from './pieces/Rook';
 import { COLS, ROWS } from './utils/constants';
 import { isArrayValid } from './utils/helperFns';
 
+// appendLog appends the passed text to messageLog.
+
 class Board {
   turn = 'white';
 
@@ -17,6 +19,32 @@ class Board {
   stalemate = false;
 
   pieces = {};
+
+  dial() {
+    let expectingMessage = false;
+    const conn = new WebSocket('ws://localhost:3000/subscribe');
+
+    conn.addEventListener('close', (ev) => {
+      if (ev.code !== 1001) {
+        console.log('dialing back in 1 second...');
+        setTimeout(this.dial, 1000);
+      }
+    });
+    conn.addEventListener('open', () => {
+      console.info('websocket connected');
+    });
+
+    // This is where we handle messages received.
+    conn.addEventListener('message', (ev) => {
+      if (typeof ev.data !== 'string') {
+        console.error('unexpected message type', typeof ev.data);
+        return;
+      }
+      if (expectingMessage) {
+        expectingMessage = false;
+      }
+    });
+  }
 
   render(element) {
     let rowHtml = '';

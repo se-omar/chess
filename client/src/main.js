@@ -9,3 +9,4 @@ document.querySelector('#app').innerHTML = `
 
 const board = new Board();
 board.render(document.querySelector('#board'));
+board.dial();

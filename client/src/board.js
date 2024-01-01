@@ -40,9 +40,19 @@ class Board {
         console.error('unexpected message type', typeof ev.data);
         return;
       }
+      console.log('dataaa: ', ev.data);
+      const [from, to] = ev.data.split(' ');
+      this.moveClickedPiece(from, to);
       if (expectingMessage) {
         expectingMessage = false;
       }
+    });
+  }
+
+  publishMove(from, to) {
+    fetch('http://localhost:3000/publish', {
+      method: 'POST',
+      body: `${from} ${to}`,
     });
   }
 
@@ -276,13 +286,13 @@ class Board {
       .forEach((el) => el.classList.remove('attack'));
   }
 
-  moveClickedPiece(targetEl) {
-    const clickedPiece = document.querySelector('.clickedPiece');
-    const position = clickedPiece.parentElement.id;
-    const piece = this.pieces[position];
+  moveClickedPiece(from, to) {
+    const clickedPiece = document.querySelector(`#${from}`).children[0];
+    const piece = this.pieces[from];
+    const targetEl = document.querySelector(`#${to}`);
     targetEl.appendChild(clickedPiece);
     piece.position = targetEl.id;
-    delete this.pieces[position];
+    delete this.pieces[from];
     this.pieces[targetEl.id] = piece;
     piece.moveCount += 1;
 
@@ -314,7 +324,10 @@ class Board {
 
   handleMovePiece(e) {
     if (e.target.classList.contains('move')) {
-      this.moveClickedPiece(e.target);
+      const clickedPiece = document.querySelector('.clickedPiece');
+      const position = clickedPiece.parentElement.id;
+      this.publishMove(position, e.target.id);
+      this.moveClickedPiece(position, e.target.id);
     }
   }
 

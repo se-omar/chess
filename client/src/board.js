@@ -21,7 +21,6 @@ class Board {
   pieces = {};
 
   dial() {
-    let expectingMessage = false;
     const conn = new WebSocket('ws://localhost:3000/subscribe');
 
     conn.addEventListener('close', (ev) => {
@@ -48,9 +47,7 @@ class Board {
         return;
       }
       this.moveClickedPiece(data.from, data.to);
-      if (expectingMessage) {
-        expectingMessage = false;
-      }
+      document.querySelector('#opName').innerHTML = data.username;
     });
   }
 

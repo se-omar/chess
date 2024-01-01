@@ -25,7 +25,7 @@ function renderLogin() {
 function renderBoard() {
   document.querySelector('#app').innerHTML = `
   <div>
-    <h2 id="opName"></h2>
+    <h2 id="opName">waiting for a opponent to move</h2>
     <div id="board"></div>
     <h2 id="myName"></h2>
   </div>

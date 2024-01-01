@@ -40,7 +40,7 @@ class Board {
         console.error('unexpected message type', typeof ev.data);
         return;
       }
-      console.log('dataaa: ', ev.data);
+      console.log('dataaa: ', JSON.parse(ev.data));
       const [from, to] = ev.data.split(' ');
       this.moveClickedPiece(from, to);
       if (expectingMessage) {
@@ -50,9 +50,15 @@ class Board {
   }
 
   publishMove(from, to) {
+    const username = localStorage.getItem('username');
+    const body = JSON.stringify({
+      from,
+      to,
+      username,
+    });
     fetch('http://localhost:3000/publish', {
       method: 'POST',
-      body: `${from} ${to}`,
+      body,
     });
   }
 

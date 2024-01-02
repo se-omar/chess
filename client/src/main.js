@@ -1,7 +1,7 @@
 import './style.css';
 import Board from './board';
 
-const username = JSON.parse(sessionStorage.getItem('username'));
+const username = sessionStorage.getItem('username');
 if (!username) {
   const inputt = prompt('Enter your Username');
   sessionStorage.setItem('username', inputt);

@@ -49,6 +49,10 @@ class Board {
       sessionStorage.setItem('opColor', data.color);
       sessionStorage.setItem('myColor', this.getOppositeColor(data.color));
       this.moveClickedPiece(data.from, data.to);
+      if (data.type === 'attack') {
+        const toEl = document.querySelector(`#${data.to}`).children[0];
+        this.removePiece(toEl);
+      }
       document.querySelector(`#${data.color}Name`).innerHTML = data.username;
       document.querySelector(
         `#${this.getOppositeColor(data.color)}Name`,
@@ -56,13 +60,14 @@ class Board {
     });
   }
 
-  publishMove(from, to, color) {
+  publishMove(from, to, color, type = 'move') {
     const username = sessionStorage.getItem('username');
     const body = JSON.stringify({
       from,
       to,
       username,
       color,
+      type,
     });
     fetch('http://localhost:3000/publish', {
       method: 'POST',
@@ -143,13 +148,19 @@ class Board {
     }
     const myColor = sessionStorage.getItem('myColor');
 
-    if (!element.classList.contains(myColor)) {
-      // alert('not your turn');
+    if (
+      !element.parentElement.classList.contains('attack')
+      && !element.classList.contains(myColor)
+    ) {
       return;
     }
 
     if (element.parentElement.classList.contains('attack')) {
-      this.moveClickedPiece(element.parentElement);
+      const clickedPiece = document.querySelector('.clickedPiece');
+      const fromPos = clickedPiece.parentElement.id;
+      const toPos = element.parentElement.id;
+      this.publishMove(fromPos, toPos, this.turn, 'attack');
+      this.moveClickedPiece(fromPos, toPos);
       this.removePiece(element);
       return;
     }
@@ -353,10 +364,9 @@ class Board {
 
   handleMovePiece(e) {
     const clickedPiece = document.querySelector('.clickedPiece');
-    const position = clickedPiece.parentElement.id;
 
-    if (e.target.classList.contains('move')) {
-      console.log(clickedPiece);
+    if (e.target.classList.contains('move') && clickedPiece) {
+      const position = clickedPiece.parentElement.id;
       this.publishMove(position, e.target.id, this.turn);
       this.moveClickedPiece(position, e.target.id);
     }

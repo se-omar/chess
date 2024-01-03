@@ -11,13 +11,13 @@ renderBoard();
 function renderBoard() {
   document.querySelector('#app').innerHTML = `
   <div>
-    <h2 id="opName">waiting for a opponent to move</h2>
+    <h2 id="blackName">waiting for a opponent to move</h2>
     <div id="board"></div>
-    <h2 id="myName"></h2>
+    <h2 id="whiteName"></h2>
   </div>
 `;
 
-  document.querySelector('#myName').innerHTML = sessionStorage.getItem('username');
+  document.querySelector('#whiteName').innerHTML = `${sessionStorage.getItem('username')} (You)`;
   const board = new Board();
   board.render(document.querySelector('#board'));
   board.dial();

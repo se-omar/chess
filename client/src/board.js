@@ -49,7 +49,10 @@ class Board {
       sessionStorage.setItem('opColor', data.color);
       sessionStorage.setItem('myColor', this.getOppositeColor(data.color));
       this.moveClickedPiece(data.from, data.to);
-      document.querySelector('#opName').innerHTML = data.username;
+      document.querySelector(`#${data.color}Name`).innerHTML = data.username;
+      document.querySelector(
+        `#${this.getOppositeColor(data.color)}Name`,
+      ).innerHTML = `${username} (You)`;
     });
   }
 

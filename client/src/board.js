@@ -46,17 +46,20 @@ class Board {
       if (username === data.username) {
         return;
       }
+      sessionStorage.setItem('opColor', data.color);
+      sessionStorage.setItem('myColor', this.getOppositeColor(data.color));
       this.moveClickedPiece(data.from, data.to);
       document.querySelector('#opName').innerHTML = data.username;
     });
   }
 
-  publishMove(from, to) {
+  publishMove(from, to, color) {
     const username = sessionStorage.getItem('username');
     const body = JSON.stringify({
       from,
       to,
       username,
+      color,
     });
     fetch('http://localhost:3000/publish', {
       method: 'POST',
@@ -94,6 +97,10 @@ class Board {
     }
   }
 
+  getOppositeColor(color) {
+    return color === 'white' ? 'black' : 'white';
+  }
+
   switchTurns() {
     if (this.turn === 'white') {
       this.turn = 'black';
@@ -124,6 +131,20 @@ class Board {
   }
 
   handlePieceClick(piece, element) {
+    if (
+      !sessionStorage.getItem('opColor')
+      && !sessionStorage.getItem('myColor')
+    ) {
+      sessionStorage.setItem('myColor', this.turn);
+      sessionStorage.setItem('opColor', this.getOppositeColor(this.turn));
+    }
+    const myColor = sessionStorage.getItem('myColor');
+
+    if (!element.classList.contains(myColor)) {
+      // alert('not your turn');
+      return;
+    }
+
     if (element.parentElement.classList.contains('attack')) {
       this.moveClickedPiece(element.parentElement);
       this.removePiece(element);
@@ -328,10 +349,12 @@ class Board {
   }
 
   handleMovePiece(e) {
+    const clickedPiece = document.querySelector('.clickedPiece');
+    const position = clickedPiece.parentElement.id;
+
     if (e.target.classList.contains('move')) {
-      const clickedPiece = document.querySelector('.clickedPiece');
-      const position = clickedPiece.parentElement.id;
-      this.publishMove(position, e.target.id);
+      console.log(clickedPiece);
+      this.publishMove(position, e.target.id, this.turn);
       this.moveClickedPiece(position, e.target.id);
     }
   }

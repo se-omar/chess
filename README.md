@@ -19,10 +19,13 @@ To get the game up and running, follow these steps:
 ``git clone https://github.com/yourusername/chess-game.git``
 
 2. setup and run the server
-``cd server``
-``go run src/main.go``
+```
+cd server
+go run src/main.go
+```
 
 3. setup and run the client
-``cd client``
-``npm i && npm run dev``
-
+```
+cd client
+npm i && npm run dev
+```

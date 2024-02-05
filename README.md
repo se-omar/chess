@@ -1,5 +1,5 @@
 # Online Chess
-This is a simple chess game implemented using JavaScript, HTML, and CSS for the frontend, and a WebSocket server for the backend. It allows two players to play chess in real-time over the internet. The game follows standard chess rules and supports moves like castling and en passant.
+This is a simple chess game implemented using JavaScript, HTML, and CSS for the frontend, and a WebSocket server for the backend. It allows two players to play chess in real-time over the internet. The game follows standard chess with most rules implemented.
 ### Features:
 * Real-time multiplayer chess game.
 * Standard chess rules and moves.
